@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.0/distro-source/core/src/gwt-module.dtd">
+<module rename-to='gwt_persistence'>
+	<!-- Inherit the core Web Toolkit stuff.                        -->
+	<inherits name='com.google.gwt.user.User' />
+
+	<generate-with
+		class="com.google.code.gwt.html5.database.persistence.rebind.GWTPersistenceGenerator">
+		<when-type-assignable
+			class="com.google.code.gwt.html5.database.persistence.client.Persistable" />
+	</generate-with>
+	
+<!--	  	<script src="http://code.google.com/apis/gears/gears_init.js" />-->
+		<script src="persistence.js"/>
+
+</module>
