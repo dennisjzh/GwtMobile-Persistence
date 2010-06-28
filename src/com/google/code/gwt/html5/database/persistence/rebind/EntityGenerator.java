@@ -228,7 +228,18 @@ public class EntityGenerator implements ClassGenerator {
 					}
 				});
 
-		utils.generateInnerClass("private", requestedClassName + "Impl", requestedClassName, new String[]{"PersistableInternal"},
+		String superClass = null;
+		String[] interfaces = null;
+		if (utils.isInterface(requestedClassName)) {
+			interfaces = new String[]{"PersistableInternal", requestedClassName};
+		}
+		else {
+			superClass = requestedClassName;
+			interfaces = new String[]{"PersistableInternal"};
+		}
+			
+		
+		utils.generateInnerClass("private", requestedClassName + "Impl", superClass, interfaces,
 				new InstanceGenerator(utils, requestedClassName, generatedClassName, getters, hasManyRels, invHasManyRels));
 
 		utils.generateInnerClass("private", "Collection" + requestedClassName + "Impl", 

@@ -18,6 +18,7 @@ package com.google.code.gwt.html5.database.persistence.rebind;
 
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
@@ -181,6 +182,14 @@ public class GenUtils {
         return null;
 	}
 	
+	public Boolean isInterface(String typeName) {
+		if (typeName.indexOf('.') < 0) {
+			typeName = factory.getCreatedPackage() + "." + typeName;			
+		}
+		JClassType classType = getClassType(typeName);
+		return classType.isInterface() != null;
+	}
+	
 	public JClassType getClassType(String typeName) {
         TypeOracle typeOracle = context.getTypeOracle();
         return typeOracle.findType(typeName);
@@ -212,9 +221,9 @@ public class GenUtils {
 	public void inspectType(String typeName, List<JMethod> getters, List<JMethod> hasManyRels, List<JMethod> revHasManyRels) {
 		JClassType classType = getClassType(typeName);
 		for (JMethod method : classType.getOverridableMethods()) {
-//			if (!method.isAbstract()) {
-//				continue;
-//			}
+			if (!method.isAbstract()) {
+				continue;
+			}
 			String methodName = method.getName();
 			if (methodName.startsWith("get")) {
 				JType returnType = method.getReturnType();					
@@ -227,22 +236,22 @@ public class GenUtils {
 					continue;
 				}
 				
-				JClassType returnClassType = returnType.isClass();
-				if (returnClassType != null) {
-					JClassType[] interfaces = returnClassType.getImplementedInterfaces();
-					boolean interfaceFound = false;
-					for (JClassType impInterface : interfaces) {
-						if (impInterface.getSimpleSourceName().equals("Persistable")) {
-							revHasManyRels.add(method);
-							interfaceFound = true;
-							break;
-						}
-					}
-					if (interfaceFound) {
-						continue;
+				JClassType returnClassType = returnType.isInterface();
+				if (returnClassType == null) {
+					returnClassType = returnType.isInterface();
+				}
+				Set<JClassType> superTypes = returnClassType.getFlattenedSupertypeHierarchy();
+				boolean interfaceFound = false;
+				for (JClassType superType : superTypes) {
+					if (superType.getSimpleSourceName().equals("Persistable")) {
+						revHasManyRels.add(method);
+						interfaceFound = true;
+						break;
 					}
 				}
-
+				if (interfaceFound) {
+					continue;
+				}
 				// TODO: error condition, don't know how to gen with the return type.
 			}
 			else {
