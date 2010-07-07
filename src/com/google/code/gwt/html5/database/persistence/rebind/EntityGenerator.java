@@ -27,21 +27,20 @@ public class EntityGenerator implements ClassGenerator {
 	final String generatedClassName;
 	final List<JMethod> getters;
 	final List<JMethod> hasManyRels;
-	final List<JMethod> invHasManyRels;
+	final List<JMethod> hasOneRels;
 
-	public EntityGenerator(GenUtils utils, String requestedClassName, String generatedClassName, List<JMethod> getters, List<JMethod> hasManyRels, List<JMethod> invHasManyRels) {
+	public EntityGenerator(GenUtils utils, String requestedClassName, String generatedClassName, List<JMethod> getters, List<JMethod> hasManyRels, List<JMethod> hasOneRels) {
 		this.utils = utils;
 		this.requestedClassName = requestedClassName;
 		this.generatedClassName = generatedClassName;
 		this.getters = getters;
 		this.hasManyRels = hasManyRels;
-		this.invHasManyRels = invHasManyRels;
+		this.hasOneRels = hasOneRels;
 	}
 
 	@Override
 	public void classSetup() {
 		AddImports();
-		SetSuperClass();
 		AddImplementedInterfaces();
 	}
 	private void AddImports() {
@@ -50,9 +49,6 @@ public class EntityGenerator implements ClassGenerator {
 		utils.factory().addImport("com.google.gwt.core.client.JsArray");
 		utils.factory().addImport("com.google.code.gwt.html5.database.persistence.client.*");
 		utils.factory().addImport("com.google.gwt.core.client.GWT");
-	}
-	private void SetSuperClass() {
-		//utils.factory().setSuperclass(typeName);
 	}
 	private void AddImplementedInterfaces() {
 		utils.factory().addImplementedInterface("EntityInternal<" + requestedClassName + ">");
@@ -74,10 +70,10 @@ public class EntityGenerator implements ClassGenerator {
 			utils.addVariable("private static", "EntityInternal<" + hasManyRelEntity + ">", 
 					"hasMany" + hasManyRelName, "GWT.create(" + hasManyRelEntity + ".class)");
 		}
-		for (JMethod invHasManyRel : invHasManyRels) {
-			String invHasManyRelEntity = invHasManyRel.getName().substring(3);
-			utils.addVariable("private static", "EntityInternal<" + invHasManyRelEntity + ">", 
-					"hasManyInverse" + invHasManyRelEntity, "GWT.create(" + invHasManyRelEntity + ".class)");
+		for (JMethod hasOneRel : hasOneRels) {
+			String hasOneRelEntity = hasOneRel.getName().substring(3);
+			utils.addVariable("private static", "EntityInternal<" + hasOneRelEntity + ">", 
+					"hasOne" + hasOneRelEntity, "GWT.create(" + hasOneRelEntity + ".class)");
 		}
 	}
 	@Override
@@ -89,9 +85,13 @@ public class EntityGenerator implements ClassGenerator {
 			public void generateMethod() {
 				for (JMethod hasManyRel : hasManyRels) {
 					String hasManyRelName = hasManyRel.getName().substring(3);
-					String hasManyRelEntity = utils.getGenericTypeShortName(hasManyRel.getReturnType().getParameterizedQualifiedSourceName());
-					utils.println("hasMany(nativeEntity, \"%s\", hasMany%ss.getNativeObject(), hasMany%ss.getInverseRelationName(\"%s\"));", 
-							hasManyRelName, hasManyRelEntity, hasManyRelEntity, requestedClassName);
+					utils.println("hasMany(nativeEntity, \"%s\", hasMany%s.getNativeObject(), hasMany%s.getInverseRelationName(\"%s\"));", 
+							hasManyRelName, hasManyRelName, hasManyRelName, requestedClassName);
+				}
+				for (JMethod hasOneRel : hasOneRels) {
+					String hasOneRelName = hasOneRel.getName().substring(3);
+					utils.println("hasOne(nativeEntity, \"%s\", hasOne%s.getNativeObject());", 
+							hasOneRelName, hasOneRelName);
 				}
 			}
 		});
@@ -153,12 +153,12 @@ public class EntityGenerator implements ClassGenerator {
 							utils.sw().outdent();
 							utils.println("}");
 						}
-						for (JMethod invHasManyRel : invHasManyRels) {
-							String inverseRelationName = invHasManyRel.getName().substring(3);
-							String inverseRelEntity = invHasManyRel.getName().substring(3);
-							utils.println("if (rel.equals(\"%s\")) {", inverseRelEntity);
+						for (JMethod hasOneRel : hasOneRels) {
+							String hasOneRelationName = hasOneRel.getName().substring(3);
+							String hasOneRelationEntity = hasOneRel.getName().substring(3);
+							utils.println("if (rel.equals(\"%s\")) {", hasOneRelationEntity);
 							utils.sw().indent();
-							utils.println("return \"%s\";", inverseRelationName);
+							utils.println("return \"%s\";", hasOneRelationName);
 							utils.sw().outdent();
 							utils.println("}");
 						}
@@ -202,6 +202,18 @@ public class EntityGenerator implements ClassGenerator {
 					}
 				});
 
+		utils.generateNativeMethod("private static", "void", "hasOne",
+				new String[][] {
+					{"JavaScriptObject", "nativeEntity"},
+					{"String", "collName"},
+					{"JavaScriptObject", "otherEntity"}},
+				new MethodGenerator() {
+					@Override
+					public void generateMethod() {
+						utils.println("nativeEntity.hasOne(collName, otherEntity);");
+					}
+				});
+
 		utils.generateMethod("public static", "void", "processCallback",
 				new String[][] {
 				{"JsArray<JavaScriptObject>", "results"},
@@ -240,11 +252,11 @@ public class EntityGenerator implements ClassGenerator {
 			
 		
 		utils.generateInnerClass("private", requestedClassName + "Impl", superClass, interfaces,
-				new InstanceGenerator(utils, requestedClassName, generatedClassName, getters, hasManyRels, invHasManyRels));
+				new InstanceGenerator(utils, requestedClassName, generatedClassName, getters, hasManyRels, hasOneRels));
 
 		utils.generateInnerClass("private", "Collection" + requestedClassName + "Impl", 
 				"CollectionBase<" + requestedClassName + ">", null,
-				new CollectionGenerator(utils, requestedClassName, generatedClassName, getters, hasManyRels, invHasManyRels));
+				new CollectionGenerator(utils, requestedClassName, generatedClassName, getters, hasManyRels, hasOneRels));
 
 	}
 }

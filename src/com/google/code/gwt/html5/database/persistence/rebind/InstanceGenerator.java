@@ -27,15 +27,15 @@ public class InstanceGenerator implements ClassGenerator {
 	final String generatedClassName;
 	final List<JMethod> getters;
 	final List<JMethod> hasManyRels;
-	final List<JMethod> invHasManyRels;
+	final List<JMethod> hasOneRels;
 
-	public InstanceGenerator(GenUtils utils, String requestedClassName, String generatedClassName, List<JMethod> getters, List<JMethod> hasManyRels, List<JMethod> invHasManyRels) {
+	public InstanceGenerator(GenUtils utils, String requestedClassName, String generatedClassName, List<JMethod> getters, List<JMethod> hasManyRels, List<JMethod> hasOneRels) {
 		this.utils = utils;
 		this.requestedClassName = requestedClassName;
 		this.generatedClassName = generatedClassName;
 		this.getters = getters;
 		this.hasManyRels = hasManyRels;
-		this.invHasManyRels = invHasManyRels;
+		this.hasOneRels = hasOneRels;
 	}
 	
 	@Override
@@ -111,36 +111,36 @@ public class InstanceGenerator implements ClassGenerator {
 						}});							
 		}
 		
-		for (final JMethod invHasManyRel : invHasManyRels) {
-			utils.generateMethod("public", invHasManyRel.getReturnType().getSimpleSourceName(), invHasManyRel.getName(), 
+		for (final JMethod hasOneRel : hasOneRels) {
+			utils.generateMethod("public", hasOneRel.getReturnType().getSimpleSourceName(), hasOneRel.getName(), 
 					null, new MethodGenerator(){
 						@Override
 						public void generateMethod() {
-							utils.println("return hasManyInverse" + invHasManyRel.getName().substring(3) + 
-									".newInstance(" + invHasManyRel.getName() + "(nativeObject));"); 											
+							utils.println("return hasOne" + hasOneRel.getName().substring(3) + 
+									".newInstance(" + hasOneRel.getName() + "(nativeObject));"); 											
 						}});
-			utils.generateNativeMethod("private", "JavaScriptObject", invHasManyRel.getName(), 
+			utils.generateNativeMethod("private", "JavaScriptObject", hasOneRel.getName(), 
 					new String[][]{{"JavaScriptObject", "nativeObject"}},
 					new MethodGenerator(){
 						@Override
 						public void generateMethod() {
-							utils.println("return nativeObject." + invHasManyRel.getName().substring(3) + ";"); 											
+							utils.println("return nativeObject." + hasOneRel.getName().substring(3) + ";"); 											
 						}});
-			utils.generateMethod("public", "void", "set" + invHasManyRel.getName().substring(3), 
-					new String[][]{{invHasManyRel.getReturnType().getSimpleSourceName(), "value"}},
+			utils.generateMethod("public", "void", "set" + hasOneRel.getName().substring(3), 
+					new String[][]{{hasOneRel.getReturnType().getSimpleSourceName(), "value"}},
 					new MethodGenerator(){
 						@Override
 						public void generateMethod() {
-							utils.println("set" + invHasManyRel.getName().substring(3) + "(((PersistableInternal)(value)).getNativeObject(), nativeObject);"); 											
+							utils.println("set" + hasOneRel.getName().substring(3) + "(((PersistableInternal)(value)).getNativeObject(), nativeObject);"); 											
 						}});
-			utils.generateNativeMethod("private", "void", "set" + invHasManyRel.getName().substring(3), 
+			utils.generateNativeMethod("private", "void", "set" + hasOneRel.getName().substring(3), 
 					new String[][]{
 						{"JavaScriptObject", "value"},
 						{"JavaScriptObject", "nativeObject"}},
 					new MethodGenerator(){
 						@Override
 						public void generateMethod() {
-							utils.println("nativeObject." + invHasManyRel.getName().substring(3) + " = value;"); 											
+							utils.println("nativeObject." + hasOneRel.getName().substring(3) + " = value;"); 											
 						}});
 		}
 	}	

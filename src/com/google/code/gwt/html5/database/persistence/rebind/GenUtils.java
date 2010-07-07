@@ -218,7 +218,7 @@ public class GenUtils {
 		return sqliteType;
 	}
 	
-	public void inspectType(String typeName, List<JMethod> getters, List<JMethod> hasManyRels, List<JMethod> revHasManyRels) {
+	public void inspectType(String typeName, List<JMethod> getters, List<JMethod> hasManyRels, List<JMethod> hasOneRels) {
 		JClassType classType = getClassType(typeName);
 		for (JMethod method : classType.getOverridableMethods()) {
 			if (!method.isAbstract()) {
@@ -244,7 +244,7 @@ public class GenUtils {
 				boolean interfaceFound = false;
 				for (JClassType superType : superTypes) {
 					if (superType.getSimpleSourceName().equals("Persistable")) {
-						revHasManyRels.add(method);
+						hasOneRels.add(method);
 						interfaceFound = true;
 						break;
 					}

@@ -27,15 +27,15 @@ public class CollectionGenerator implements ClassGenerator {
 	final String generatedClassName;
 	final List<JMethod> getters;
 	final List<JMethod> hasManyRels;
-	final List<JMethod> revHasManyRels;
+	final List<JMethod> hasOneRels;
 
-	public CollectionGenerator(GenUtils utils, String requestedClassName, String generatedClassName, List<JMethod> getters, List<JMethod> hasManyRels, List<JMethod> revHasManyRels) {
+	public CollectionGenerator(GenUtils utils, String requestedClassName, String generatedClassName, List<JMethod> getters, List<JMethod> hasManyRels, List<JMethod> hasOneRels) {
 		this.utils = utils;
 		this.requestedClassName = requestedClassName;
 		this.generatedClassName = generatedClassName;
 		this.getters = getters;
 		this.hasManyRels = hasManyRels;
-		this.revHasManyRels = revHasManyRels;
+		this.hasOneRels = hasOneRels;
 	}
 
 	@Override
