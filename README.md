@@ -1,7 +1,7 @@
-gwt-persistence
+gwt-html5-persistence
 ===============
 
-An GWT wrapper of the Javascript object-relational mapper library [persistence.js](http://github.com/zefhemel/persistencejs). It provides client-side object persistence capability to GWT applications, a feature similar to what Hibernate provides for GWT applications on the server-side.
+gwt-html5-persistence is an GWT wrapper of the Javascript object-relational mapper library [persistence.js](http://github.com/zefhemel/persistencejs). It provides client-side object persistence capability to GWT applications, a feature similar to what Hibernate provides for GWT applications on the server-side.
 
 Schema definition
 -----------------
@@ -82,20 +82,20 @@ To create an object of the entity, use the `Entity<T>.newInstance` method. The r
 How to use
 ----------
 
-1. Import gwt-persistence project into Eclipse.
+1. Import gwt-html5-persistence project into Eclipse.
 
-* Copy [persistence.js](http://github.com/zefhemel/persistencejs) into folder `gwt-persistence/src/com/google/code/gwt/html5/database/persistence/public`.
+* Copy [persistence.js](http://github.com/zefhemel/persistencejs) into folder `gwt-html5-persistence/src/com/google/code/gwt/html5/database/persistence/public`. Create the folder if it does not exist.
 
-* In Eclipse, export gwt-persistence as a JAR file.
+* In Eclipse, export gwt-html5-persistence as a JAR file.
 
 * Create your GWT project in Eclipse.
 
-* Add the gwt-persistence JAR file as a library to your project.
+* Add the gwt-html5-persistence JAR file as a library to your project.
 
 * Update the project configure file to include the following:
 
 		<script src="http://code.google.com/apis/gears/gears_init.js" />  <!-- Include this line only if you use Google Gears database.-->
-		<inherits name='com.google.code.gwt.html5.database.persistence.gwt_persistence' />
+		<inherits name='com.google.code.gwt.html5.database.persistence.gwt_html5_persistence' />
   
 * Now your GWT project will be able to persist objects to the brower database!
  
