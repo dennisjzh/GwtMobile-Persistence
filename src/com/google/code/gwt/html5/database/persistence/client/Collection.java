@@ -23,11 +23,19 @@ public interface Collection<T extends Persistable>{
 	public Collection<T> filter(String property, String operator, float value);
 	public Collection<T> filter(String property, String operator, String value);
 	public Collection<T> prefetch(String rel);
+	public Collection<T> order(String property, boolean ascending);
+	public Collection<T> limit(int n);
+	public Collection<T> skip(int n);
+	public void add(T obj);
+	public void remove(T obj);
 	public void list(Transaction tx, CollectionCallback<T> callback);
 	public void list(CollectionCallback<T> callback);
 	public void each(Transaction tx, ScalarCallback<T> callback);
 	public void each(ScalarCallback<T> callback);
-	public void add(T obj);
-	public void remove(T obj);
-	
+	public void one(Transaction tx, ScalarCallback<T> callback);
+	public void one(ScalarCallback<T> callback);
+	public void destroyAll(Transaction tx, Callback callback);
+	public void destroyAll(Callback callback);
+	public void count(Transaction tx, ScalarCallback<Integer> callback);
+	public void count(ScalarCallback<Integer> callback);	
 }

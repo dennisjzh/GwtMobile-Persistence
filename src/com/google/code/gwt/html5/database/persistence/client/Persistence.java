@@ -22,7 +22,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class Persistence {
 	
-	private static Boolean _autoAdd = false;
+	private static Boolean _autoAdd = true;
 	
 	static {
 		initializeConsole();

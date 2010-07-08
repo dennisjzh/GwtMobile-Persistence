@@ -46,7 +46,6 @@ public class EntityGenerator implements ClassGenerator {
 	private void AddImports() {
 		utils.factory().addImport("java.util.HashMap");
 		utils.factory().addImport("com.google.gwt.core.client.JavaScriptObject");
-		utils.factory().addImport("com.google.gwt.core.client.JsArray");
 		utils.factory().addImport("com.google.code.gwt.html5.database.persistence.client.*");
 		utils.factory().addImport("com.google.gwt.core.client.GWT");
 	}
@@ -63,7 +62,6 @@ public class EntityGenerator implements ClassGenerator {
 		}
 		sb.append("}});");
 		utils.addVariable("private static", "JavaScriptObject", "nativeEntity", sb.toString());
-		utils.addVariable("private static", generatedClassName, "entity", String.format("new %s()", generatedClassName));
 		for (JMethod hasManyRel : hasManyRels) {
 			String hasManyRelName = hasManyRel.getName().substring(3);
 			String hasManyRelEntity = utils.getGenericTypeShortName(hasManyRel.getReturnType().getParameterizedQualifiedSourceName());
@@ -122,12 +120,21 @@ public class EntityGenerator implements ClassGenerator {
 			}
 		});
 
+		utils.generateMethod("public", requestedClassName + "[]", "newInstanceArray", 
+				new String[][] {{"int", "size"}},
+				new MethodGenerator() {
+					@Override
+					public void generateMethod() {
+						utils.println("return new %s[size];", requestedClassName);
+					}
+				});
+		
 		utils.generateMethod("public", "Collection<" + requestedClassName + ">", "all", null,
 				new MethodGenerator() {
 			@Override
 			public void generateMethod() {
 				utils.println("JavaScriptObject nativeObject = %s.all(nativeEntity);", generatedClassName);
-				utils.println("return new Collection%sImpl(nativeObject);", requestedClassName);
+				utils.println("return new CollectionImpl(nativeObject, this);");
 			}
 		});
 
@@ -136,7 +143,7 @@ public class EntityGenerator implements ClassGenerator {
 				new MethodGenerator() {
 			@Override
 			public void generateMethod() {
-				utils.println("return new Collection%sImpl(nativeObject);", requestedClassName);
+				utils.println("return new CollectionImpl(nativeObject, this);", requestedClassName);
 			}
 		});
 
@@ -214,32 +221,6 @@ public class EntityGenerator implements ClassGenerator {
 					}
 				});
 
-		utils.generateMethod("public static", "void", "processCallback",
-				new String[][] {
-				{"JsArray<JavaScriptObject>", "results"},
-				{"CollectionCallback<" + requestedClassName + ">", "callback"}},
-				new MethodGenerator() {
-					@Override
-					public void generateMethod() {
-						utils.println("%s[] array = new %s[results.length()];", requestedClassName, requestedClassName);
-						utils.println("for (int i = 0; i < array.length; i++) {");
-						utils.println("\tarray[i] = entity.newInstance(results.get(i));");
-						utils.print("}");
-						utils.print("callback.onSuccess(array);");
-					}
-				});
-		
-		utils.generateMethod("public static", "void", "processCallback",
-				new String[][] {
-				{"JavaScriptObject", "result"},
-				{"ScalarCallback<" + requestedClassName + ">", "callback"}}, 						
-				new MethodGenerator() {
-					@Override
-					public void generateMethod() {
-						utils.print("callback.onSuccess(entity.newInstance(result));");
-					}
-				});
-
 		String superClass = null;
 		String[] interfaces = null;
 		if (utils.isInterface(requestedClassName)) {
@@ -253,10 +234,6 @@ public class EntityGenerator implements ClassGenerator {
 		
 		utils.generateInnerClass("private", requestedClassName + "Impl", superClass, interfaces,
 				new InstanceGenerator(utils, requestedClassName, generatedClassName, getters, hasManyRels, hasOneRels));
-
-		utils.generateInnerClass("private", "Collection" + requestedClassName + "Impl", 
-				"CollectionBase<" + requestedClassName + ">", null,
-				new CollectionGenerator(utils, requestedClassName, generatedClassName, getters, hasManyRels, hasOneRels));
 
 	}
 }

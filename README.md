@@ -84,22 +84,18 @@ How to use
 
 1. Import gwt-persistence project into Eclipse.
 
+* Copy [persistence.js](http://github.com/zefhemel/persistencejs) into folder `gwt-persistence/src/com/google/code/gwt/html5/database/persistence/public`.
+
 * In Eclipse, export gwt-persistence as a JAR file.
 
 * Create your GWT project in Eclipse.
 
-* Add the JAR file as a library to the GWT project.
-
-* Create a folder named `public` under the GWT project where the project configure file (extension `.gwt.xml`) is located.
-
-* Copy [persistence.js](http://github.com/zefhemel/persistencejs) into the `public' folder.
+* Add the gwt-persistence JAR file as a library to your project.
 
 * Update the project configure file to include the following:
 
 		<script src="http://code.google.com/apis/gears/gears_init.js" />  <!-- Include this line only if you use Google Gears database.-->
-		<script src="persistence.js" />
 		<inherits name='com.google.code.gwt.html5.database.persistence.gwt_persistence' />
- 
- 
-* Now the GWT project will be able to persist objects to the brower database!
+  
+* Now your GWT project will be able to persist objects to the brower database!
  

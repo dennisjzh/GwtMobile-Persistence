@@ -10,7 +10,6 @@
 			class="com.google.code.gwt.html5.database.persistence.client.Persistable" />
 	</generate-with>
 	
-<!--	  	<script src="http://code.google.com/apis/gears/gears_init.js" />-->
-<!--		<script src="persistence.js"/>-->
+	<script src="persistence.js"/>
 
 </module>
