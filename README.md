@@ -97,5 +97,5 @@ How to use
 		<script src="http://code.google.com/apis/gears/gears_init.js" />  <!-- Include this line only if you use Google Gears database.-->
 		<inherits name='com.google.code.gwt.html5.database.persistence.gwt_html5_persistence' />
   
-* Now your GWT project will be able to persist objects to the brower database!
+* Now your GWT project is ready to persist objects to the brower database!
  
