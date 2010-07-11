@@ -66,19 +66,28 @@ public class InstanceGenerator implements ClassGenerator {
 			final String returnTypeName = getter.getReturnType().getSimpleSourceName();
 			final boolean isDateReturnType = returnTypeName.equals("Date");
 			final boolean isPrimitiveType = getter.getReturnType().isPrimitive() != null;
+			final boolean isJsonReturnType = utils.isSubclassOf(getter.getReturnType(), "JSONValue");
 			utils.generateMethod("public", returnTypeName, getter.getName(), 
 					null, new MethodGenerator(){
 						@Override
 						public void generateMethod() {
 							if (isDateReturnType) {
-								utils.println("long value = (long)" + getter.getName() + "(nativeObject);"); 																			
+								utils.println("long value = (long)" + getter.getName() + "(nativeObject);");
+								//TODO: now assume the actual date is not "the epoch".
 								utils.println("return (value == 0) ? null : new Date(value);"); 																			
+							}
+							else if (isJsonReturnType) {
+								utils.println("String value = " + getter.getName() + "(nativeObject);");
+								utils.println("return (value == null) ? null : (%s) JSONParser.parse(value);", returnTypeName);
 							}
 							else {
 								utils.println("return " + getter.getName() + "(nativeObject);"); 											
 							}
 						}});
-			utils.generateNativeMethod("private", isDateReturnType ? "double" : returnTypeName, getter.getName(), 
+			utils.generateNativeMethod("private", 
+					isDateReturnType ? "double" :
+						isJsonReturnType ? "String" :
+						returnTypeName, getter.getName(), 
 					new String[][]{{"JavaScriptObject", "nativeObject"}},
 					new MethodGenerator(){
 						@Override
@@ -90,6 +99,9 @@ public class InstanceGenerator implements ClassGenerator {
 							else if (isDateReturnType) {
 								//return Date.getTime() as double. Can't pass long to Java.
 								utils.println("return (value == null) ? 0 : value.getTime();"); 											
+							}
+							else if (isJsonReturnType) {
+								utils.println("return (value == null) ? null : JSON.stringify(value);"); 											
 							}
 							else {
 								utils.println("return value;");
@@ -103,19 +115,27 @@ public class InstanceGenerator implements ClassGenerator {
 							if (isDateReturnType) {
 								utils.println("set" + getter.getName().substring(3) + "(value == null ? 0 : value.getTime(), nativeObject);");
 							}
+							else if (isJsonReturnType) {
+								utils.println("set" + getter.getName().substring(3) + "(value == null ? null : value.toString(), nativeObject);");
+							}
 							else {
 								utils.println("set" + getter.getName().substring(3) + "(value, nativeObject);");
 							}
 						}});
 			utils.generateNativeMethod("private", "void", "set" + getter.getName().substring(3), 
 					new String[][]{
-						{isDateReturnType ? "double" : returnTypeName, "value"},
+						{isDateReturnType ? "double" : 
+							isJsonReturnType ? "String" : 
+							returnTypeName, "value"},
 						{"JavaScriptObject", "nativeObject"}},
 					new MethodGenerator(){
 						@Override
 						public void generateMethod() {
 							if (isDateReturnType) {
 								utils.println("nativeObject." + getter.getName().substring(3) + " = (value == 0) ? null : new Date(value);");
+							}
+							else if (isJsonReturnType) {
+								utils.println("nativeObject." + getter.getName().substring(3) + " = (value == null) ? null : JSON.parse(value);");
 							}
 							else {
 								utils.println("nativeObject." + getter.getName().substring(3) + " = value;");

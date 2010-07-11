@@ -218,6 +218,9 @@ public class GenUtils {
 			if (returnTypeName.equals("String")) {
 				sqliteType = "TEXT";				
 			}
+			else if (isSubclassOf(returnType, "JSONValue")) {
+				sqliteType = "JSON";
+			}
 			else {
 				sqliteType = returnTypeName.toUpperCase();
 			}
@@ -237,7 +240,8 @@ public class GenUtils {
 				String returnTypeName = returnType.getSimpleSourceName();
 				if (returnType.isPrimitive() != null && !returnTypeName.equals("long") 
 						|| returnTypeName.equals("String")
-						|| returnTypeName.equals("Date")) {
+						|| returnTypeName.equals("Date")
+						|| isSubclassOf(returnType, "JSONValue")) {
 					getters.add(method);
 					continue;
 				}
@@ -246,28 +250,17 @@ public class GenUtils {
 		                	"GWT JSNI does not support 'long' as return type on getter '" + methodName + "'. Use 'double' instead.");
 						throw new UnableToCompleteException();
 				}
-
+				
 				if (returnTypeName.startsWith("Collection")) {
 					hasManyRels.add(method);
 					continue;
 				}
 				
-				JClassType returnClassType = returnType.isInterface();
-				if (returnClassType == null) {
-					returnClassType = returnType.isClass();
-				}
-				Set<JClassType> superTypes = returnClassType.getFlattenedSupertypeHierarchy();
-				boolean interfaceFound = false;
-				for (JClassType superType : superTypes) {
-					if (superType.getSimpleSourceName().equals("Persistable")) {
-						hasOneRels.add(method);
-						interfaceFound = true;
-						break;
-					}
-				}
-				if (interfaceFound) {
+				if (isSubclassOf(returnType, "Persistable")) {
+					hasOneRels.add(method);
 					continue;
 				}
+
 				logger.log(TreeLogger.ERROR,
                 	"Unsupported return type '" + returnTypeName + "' on getter '" + methodName + "'.");
 				throw new UnableToCompleteException();
@@ -277,6 +270,23 @@ public class GenUtils {
 			}
 				
 		}
+	}
+	
+	public boolean isSubclassOf(JType type, String superClass) {
+		JClassType classType = type.isInterface();
+		if (classType == null) {
+			classType = type.isClass();
+		}
+		if (classType == null) {
+			return false;
+		}
+		Set<JClassType> superTypes = classType.getFlattenedSupertypeHierarchy();
+		for (JClassType superType : superTypes) {
+			if (superType.getSimpleSourceName().equals(superClass)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public String getGenericTypeShortName(String collectionTypeName) {
