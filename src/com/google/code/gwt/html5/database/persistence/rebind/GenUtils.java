@@ -208,12 +208,18 @@ public class GenUtils {
 				sqliteType = "BOOL"; 
 			}
 			else {
-				sqliteType = primitiveReturnType.getSimpleSourceName();
+				sqliteType = primitiveReturnType.getSimpleSourceName().toUpperCase();
 			}
 		}
 		else
 		{
-			sqliteType = "TEXT";
+			String returnTypeName = returnType.getSimpleSourceName();
+			if (returnTypeName.equals("String")) {
+				sqliteType = "TEXT";				
+			}
+			else {
+				sqliteType = returnTypeName.toUpperCase();
+			}
 		}
 		return sqliteType;
 	}
@@ -227,7 +233,9 @@ public class GenUtils {
 			String methodName = method.getName();
 			if (methodName.startsWith("get")) {
 				JType returnType = method.getReturnType();					
-				if (returnType.isPrimitive() != null || returnType.getSimpleSourceName().equals("String")) {
+				if (returnType.isPrimitive() != null 
+						|| returnType.getSimpleSourceName().equals("String")
+						|| returnType.getSimpleSourceName().equals("Date")) {
 					getters.add(method);
 					continue;
 				}
@@ -238,7 +246,7 @@ public class GenUtils {
 				
 				JClassType returnClassType = returnType.isInterface();
 				if (returnClassType == null) {
-					returnClassType = returnType.isInterface();
+					returnClassType = returnType.isClass();
 				}
 				Set<JClassType> superTypes = returnClassType.getFlattenedSupertypeHierarchy();
 				boolean interfaceFound = false;

@@ -2,3 +2,4 @@ lib
 classes
 *~
 persistence.js
+war/gwt_html5_persistence

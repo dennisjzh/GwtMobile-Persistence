@@ -63,34 +63,59 @@ public class InstanceGenerator implements ClassGenerator {
 		
 		for (final JMethod getter : getters) {
 			//TODO: is getter method always public?
-			utils.generateMethod("public", getter.getReturnType().getSimpleSourceName(), getter.getName(), 
+			final String returnTypeName = getter.getReturnType().getSimpleSourceName();
+			final boolean isDateReturnType = returnTypeName.equals("Date");
+			utils.generateMethod("public", returnTypeName, getter.getName(), 
 					null, new MethodGenerator(){
 						@Override
 						public void generateMethod() {
-							utils.println("return " + getter.getName() + "(nativeObject);"); 											
+							if (isDateReturnType) {
+								utils.println("long value = (long)" + getter.getName() + "(nativeObject);"); 																			
+								utils.println("return (value == 0) ? null : new Date(value);"); 																			
+							}
+							else {
+								utils.println("return " + getter.getName() + "(nativeObject);"); 											
+							}
 						}});
-			utils.generateNativeMethod("private", getter.getReturnType().getSimpleSourceName(), getter.getName(), 
+			utils.generateNativeMethod("private", isDateReturnType ? "double" : returnTypeName, getter.getName(), 
 					new String[][]{{"JavaScriptObject", "nativeObject"}},
 					new MethodGenerator(){
 						@Override
 						public void generateMethod() {
-							utils.println("return nativeObject." + getter.getName().substring(3) + ";"); 											
+							// return Date.getTime() as double. Can't pass long to Java.
+							if (isDateReturnType) {
+								utils.println("var value = nativeObject." + getter.getName().substring(3) + ";");
+								utils.println("return (value == null) ? 0 : value.getTime();"); 											
+							}
+							else {
+								utils.println("return nativeObject." + getter.getName().substring(3) + ";");
+							}
 						}});
 			utils.generateMethod("public", "void", "set" + getter.getName().substring(3), 
-					new String[][]{{getter.getReturnType().getSimpleSourceName(), "value"}},
+					new String[][]{{returnTypeName, "value"}},
 					new MethodGenerator(){
 						@Override
 						public void generateMethod() {
-							utils.println("set" + getter.getName().substring(3) + "(value, nativeObject);"); 											
+							if (isDateReturnType) {
+								utils.println("set" + getter.getName().substring(3) + "(value == null ? 0 : value.getTime(), nativeObject);");
+							}
+							else {
+								utils.println("set" + getter.getName().substring(3) + "(value, nativeObject);");
+							}
 						}});
 			utils.generateNativeMethod("private", "void", "set" + getter.getName().substring(3), 
 					new String[][]{
-						{getter.getReturnType().getSimpleSourceName(), "value"},
+						{isDateReturnType ? "double" : returnTypeName, "value"},
 						{"JavaScriptObject", "nativeObject"}},
 					new MethodGenerator(){
 						@Override
 						public void generateMethod() {
-							utils.println("nativeObject." + getter.getName().substring(3) + " = value;"); 											
+							if (isDateReturnType) {
+								utils.println("nativeObject." + getter.getName().substring(3) + " = (value == 0) ? null : new Date(value);");
+							}
+							else {
+								utils.println("nativeObject." + getter.getName().substring(3) + " = value;");
+							}
 						}});
 		}
 		

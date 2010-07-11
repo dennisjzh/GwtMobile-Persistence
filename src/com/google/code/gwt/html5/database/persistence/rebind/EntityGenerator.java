@@ -45,6 +45,7 @@ public class EntityGenerator implements ClassGenerator {
 	}
 	private void AddImports() {
 		utils.factory().addImport("java.util.HashMap");
+		utils.factory().addImport("java.util.Date");
 		utils.factory().addImport("com.google.gwt.core.client.JavaScriptObject");
 		utils.factory().addImport("com.google.code.gwt.html5.database.persistence.client.*");
 		utils.factory().addImport("com.google.gwt.core.client.GWT");
