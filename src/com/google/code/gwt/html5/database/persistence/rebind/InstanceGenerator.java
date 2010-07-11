@@ -65,6 +65,7 @@ public class InstanceGenerator implements ClassGenerator {
 			//TODO: is getter method always public?
 			final String returnTypeName = getter.getReturnType().getSimpleSourceName();
 			final boolean isDateReturnType = returnTypeName.equals("Date");
+			final boolean isPrimitiveType = getter.getReturnType().isPrimitive() != null;
 			utils.generateMethod("public", returnTypeName, getter.getName(), 
 					null, new MethodGenerator(){
 						@Override
@@ -82,13 +83,16 @@ public class InstanceGenerator implements ClassGenerator {
 					new MethodGenerator(){
 						@Override
 						public void generateMethod() {
-							// return Date.getTime() as double. Can't pass long to Java.
-							if (isDateReturnType) {
-								utils.println("var value = nativeObject." + getter.getName().substring(3) + ";");
+							utils.println("var value = nativeObject." + getter.getName().substring(3) + ";");
+							if (isPrimitiveType) {
+								utils.println("return (value == null) ? 0 : value;"); 											
+							}
+							else if (isDateReturnType) {
+								//return Date.getTime() as double. Can't pass long to Java.
 								utils.println("return (value == null) ? 0 : value.getTime();"); 											
 							}
 							else {
-								utils.println("return nativeObject." + getter.getName().substring(3) + ";");
+								utils.println("return value;");
 							}
 						}});
 			utils.generateMethod("public", "void", "set" + getter.getName().substring(3), 
