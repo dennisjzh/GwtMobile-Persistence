@@ -22,6 +22,7 @@ import java.util.Set;
 
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
+import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
@@ -224,7 +225,7 @@ public class GenUtils {
 		return sqliteType;
 	}
 	
-	public void inspectType(String typeName, List<JMethod> getters, List<JMethod> hasManyRels, List<JMethod> hasOneRels) {
+	public void inspectType(String typeName, List<JMethod> getters, List<JMethod> hasManyRels, List<JMethod> hasOneRels) throws UnableToCompleteException {
 		JClassType classType = getClassType(typeName);
 		for (JMethod method : classType.getOverridableMethods()) {
 			if (!method.isAbstract()) {
@@ -232,14 +233,21 @@ public class GenUtils {
 			}
 			String methodName = method.getName();
 			if (methodName.startsWith("get")) {
-				JType returnType = method.getReturnType();					
-				if (returnType.isPrimitive() != null 
-						|| returnType.getSimpleSourceName().equals("String")
-						|| returnType.getSimpleSourceName().equals("Date")) {
+				JType returnType = method.getReturnType();
+				String returnTypeName = returnType.getSimpleSourceName();
+				if (returnType.isPrimitive() != null && !returnTypeName.equals("long") 
+						|| returnTypeName.equals("String")
+						|| returnTypeName.equals("Date")) {
 					getters.add(method);
 					continue;
 				}
-				if (returnType.getSimpleSourceName().startsWith("Collection")) {
+				if (returnTypeName.equals("long")) {
+					logger.log(TreeLogger.ERROR,
+		                	"GWT JSNI does not support 'long' as return type on getter '" + methodName + "'. Use 'double' instead.");
+						throw new UnableToCompleteException();
+				}
+
+				if (returnTypeName.startsWith("Collection")) {
 					hasManyRels.add(method);
 					continue;
 				}
@@ -260,7 +268,9 @@ public class GenUtils {
 				if (interfaceFound) {
 					continue;
 				}
-				// TODO: error condition, don't know how to gen with the return type.
+				logger.log(TreeLogger.ERROR,
+                	"Unsupported return type '" + returnTypeName + "' on getter '" + methodName + "'.");
+				throw new UnableToCompleteException();
 			}
 			else {
 				// TODO: check if method is a setter. ignore if so, error if not.
