@@ -38,7 +38,7 @@ If the return type of a getter method extends the `Persistable` marker interface
 
 If the getter methods on both ends of the relationship return a `Collection<T extends Persistable>`, that is a "many to many" relationship.
 
-Objct creation and persistence
+Object creation and persistence
 ------------------------------
 
 The entity is created with the `GWT.create` call. For example, `GWT.create(Task.class)` creates an entity of `Task`. The type of the created entity is `Entity<Task>`.
@@ -48,6 +48,10 @@ To create an object of the entity, use the `Entity<T>.newInstance` method. The r
 	final Entity<Tag> tagEntity = GWT.create(Tag.class);
 	final Entity<Category> categoryEntity = GWT.create(Category.class);
 	
+	Persistence.connect("YourDBName", "Your DB Description", 5 * 1024 * 1024);
+	Persistence.setAutoAdd(true);	//This is optional. When set, object created by Entity.newInstance() will
+									//be added to persistence automatically.
+
 	Persistence.schemaSync(new Callback() {
 		public void onSuccess() {
 			final Category c = categoryEntity.newInstance();
@@ -84,18 +88,18 @@ How to use
 
 1. Import gwt-mobile-persistence project into Eclipse.
 
-* Copy [persistence.js](http://github.com/zefhemel/persistencejs) into folder `gwt-mobile-persistence/src/com/google/code/gwt/html5/database/persistence/public`. Create the folder if it does not exist.
+* [Optional]Copy the latest persistence source code `lib/persistence.js`, `lib/persistence.store.sql.js` and `lib/persistence.store.websql.js` into folder `gwt-mobile-persistence/src/com/touchonmobile/gwtmobile/persistence/public`, replacing existing files.
 
-* In Eclipse, export gwt-mobile-persistence as a JAR file.
+* In Eclipse, export gwt-mobile-persistence as an JAR file.
 
 * Create your GWT project in Eclipse.
 
-* Add the gwt-mobile-persistence JAR file as a library to your project.
+* Add the gwt-mobile-persistence JAR file as an external library to your project.
 
-* Update the project configure file to include the following:
+* Update your project configure file (.gwt.xml) to include the following:
 
 		<script src="http://code.google.com/apis/gears/gears_init.js" />  <!-- Include this line only if you use Google Gears database.-->
-		<inherits name='com.google.code.gwt.html5.database.persistence.gwt_html5_persistence' />
+		<inherits name='com.touchonmobile.gwtmobile.persistence.gwt_mobile_persistence' />
   
 * Now your GWT project is ready to persist objects to the brower database!
  
