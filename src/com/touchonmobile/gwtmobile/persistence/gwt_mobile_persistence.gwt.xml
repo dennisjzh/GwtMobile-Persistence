@@ -11,5 +11,7 @@
 	</generate-with>
 	
 	<script src="persistence.js"/>
+	<script src="persistence.store.sql.js"/>
+	<script src="persistence.store.websql.js"/>
 
 </module>

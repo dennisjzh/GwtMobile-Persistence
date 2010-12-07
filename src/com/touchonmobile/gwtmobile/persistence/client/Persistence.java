@@ -45,7 +45,7 @@ public class Persistence {
 	}
 
 	public static native void connect(String dbname, String description, int size) /*-{
-		$wnd.persistence.connect(dbname, description, size);
+		$wnd.persistence.store.websql.config($wnd.persistence, dbname, description, size);
 	}-*/;
 	
 	public static JavaScriptObject define(String entityName, Map<String, String> fields) {
