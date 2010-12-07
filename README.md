@@ -1,7 +1,7 @@
-gwt-html5-persistence
+gwt-mobile-persistence
 ===============
 
-gwt-html5-persistence is an GWT wrapper of the Javascript object-relational mapper library [persistence.js](http://github.com/zefhemel/persistencejs). It provides client-side object persistence capability to GWT applications, a feature similar to what Hibernate provides for GWT applications on the server-side.
+gwt-mobile-persistence is an GWT wrapper of the Javascript object-relational mapper library [persistence.js](http://github.com/zefhemel/persistencejs). It provides client-side object persistence capability to GWT applications, a feature similar to what Hibernate provides for GWT applications on the server-side.
 
 Schema definition
 -----------------
@@ -82,15 +82,15 @@ To create an object of the entity, use the `Entity<T>.newInstance` method. The r
 How to use
 ----------
 
-1. Import gwt-html5-persistence project into Eclipse.
+1. Import gwt-mobile-persistence project into Eclipse.
 
-* Copy [persistence.js](http://github.com/zefhemel/persistencejs) into folder `gwt-html5-persistence/src/com/google/code/gwt/html5/database/persistence/public`. Create the folder if it does not exist.
+* Copy [persistence.js](http://github.com/zefhemel/persistencejs) into folder `gwt-mobile-persistence/src/com/google/code/gwt/html5/database/persistence/public`. Create the folder if it does not exist.
 
-* In Eclipse, export gwt-html5-persistence as a JAR file.
+* In Eclipse, export gwt-mobile-persistence as a JAR file.
 
 * Create your GWT project in Eclipse.
 
-* Add the gwt-html5-persistence JAR file as a library to your project.
+* Add the gwt-mobile-persistence JAR file as a library to your project.
 
 * Update the project configure file to include the following:
 
