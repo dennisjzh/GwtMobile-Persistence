@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Zhihua (Dennis) Jiang.
+ * Copyright 2010 Zhihua (Dennis) Jiang
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.code.gwt.html5.database.persistence.client;
+package com.touchonmobile.gwtmobile.persistence.client;
 
 import java.util.Map;
 
@@ -56,7 +56,7 @@ public class Persistence {
 	public static native void transaction(TransactionCallback callback) /*-{
 		$wnd.persistence.transaction(
 			function(transaction) {
-				callback.@com.google.code.gwt.html5.database.persistence.client.TransactionCallback::onSuccess(Lcom/google/code/gwt/html5/database/persistence/client/Transaction;)(transaction);
+				callback.@com.touchonmobile.gwtmobile.persistence.client.TransactionCallback::onSuccess(Lcom/touchonmobile/gwtmobile/persistence/client/Transaction;)(transaction);
 			}
 		);
 	}-*/;
@@ -64,7 +64,7 @@ public class Persistence {
 	public static native void schemaSync(TransactionCallback callback) /*-{
 		$wnd.persistence.schemaSync(
 			function(transaction) {
-				callback.@com.google.code.gwt.html5.database.persistence.client.TransactionCallback::onSuccess(Lcom/google/code/gwt/html5/database/persistence/client/Transaction;)(transaction);
+				callback.@com.touchonmobile.gwtmobile.persistence.client.TransactionCallback::onSuccess(Lcom/touchonmobile/gwtmobile/persistence/client/Transaction;)(transaction);
 			}
 		);
 	}-*/;
@@ -72,7 +72,7 @@ public class Persistence {
 	public static native void schemaSync(Callback callback) /*-{
 		$wnd.persistence.schemaSync(
 			function(transaction) {
-				callback.@com.google.code.gwt.html5.database.persistence.client.Callback::onSuccess()();
+				callback.@com.touchonmobile.gwtmobile.persistence.client.Callback::onSuccess()();
 			}
 		);
 	}-*/;
@@ -96,7 +96,7 @@ public class Persistence {
 	public static native void flush(Transaction transaction, Callback callback) /*-{
 		$wnd.persistence.flush(transaction,
 			function() {
-				callback.@com.google.code.gwt.html5.database.persistence.client.Callback::onSuccess()();
+				callback.@com.touchonmobile.gwtmobile.persistence.client.Callback::onSuccess()();
 			}
 		);
 	}-*/;
@@ -104,7 +104,7 @@ public class Persistence {
 	public static native void flush(Callback callback) /*-{
 		$wnd.persistence.flush(null,
 			function() {
-				callback.@com.google.code.gwt.html5.database.persistence.client.Callback::onSuccess()();
+				callback.@com.touchonmobile.gwtmobile.persistence.client.Callback::onSuccess()();
 			}
 		);
 	}-*/;

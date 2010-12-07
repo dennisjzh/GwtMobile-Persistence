@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Zhihua (Dennis) Jiang.
+ * Copyright 2010 Zhihua (Dennis) Jiang
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.code.gwt.html5.database.persistence.rebind;
+package com.touchonmobile.gwtmobile.persistence.rebind;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class EntityGenerator implements ClassGenerator {
 		utils.factory().addImport("com.google.gwt.core.client.JavaScriptObject");
 		utils.factory().addImport("com.google.gwt.core.client.GWT");
 		utils.factory().addImport("com.google.gwt.json.client.*");
-		utils.factory().addImport("com.google.code.gwt.html5.database.persistence.client.*");
+		utils.factory().addImport("com.touchonmobile.gwtmobile.persistence.client.*");
 	}
 	private void AddImplementedInterfaces() {
 		utils.factory().addImplementedInterface("EntityInternal<" + requestedClassName + ">");
@@ -71,9 +71,10 @@ public class EntityGenerator implements ClassGenerator {
 					"hasMany" + hasManyRelName, "GWT.create(" + hasManyRelEntity + ".class)");
 		}
 		for (JMethod hasOneRel : hasOneRels) {
-			String hasOneRelEntity = hasOneRel.getName().substring(3);
+            String hasOneRelColName = hasOneRel.getName().substring(3);
+            String hasOneRelEntity = hasOneRel.getReturnType().getSimpleSourceName();
 			utils.addVariable("private static", "EntityInternal<" + hasOneRelEntity + ">", 
-					"hasOne" + hasOneRelEntity, "GWT.create(" + hasOneRelEntity + ".class)");
+					"hasOne" + hasOneRelColName, "GWT.create(" + hasOneRelEntity + ".class)");
 		}
 	}
 	@Override
@@ -89,9 +90,9 @@ public class EntityGenerator implements ClassGenerator {
 							hasManyRelName, hasManyRelName, hasManyRelName, requestedClassName);
 				}
 				for (JMethod hasOneRel : hasOneRels) {
-					String hasOneRelName = hasOneRel.getName().substring(3);
+					String hasOneRelColName = hasOneRel.getName().substring(3);
 					utils.println("hasOne(nativeEntity, \"%s\", hasOne%s.getNativeObject());", 
-							hasOneRelName, hasOneRelName);
+							hasOneRelColName, hasOneRelColName);
 				}
 			}
 		});
@@ -152,6 +153,7 @@ public class EntityGenerator implements ClassGenerator {
 		utils.generateMethod("public", "String", "getInverseRelationName",
 				new String[][] {{"String", "rel"}}, 
 				new MethodGenerator(){
+					@Override
 					public void generateMethod() {
 						for (JMethod hasManyRel : hasManyRels) {
 							String hasManyRelName = hasManyRel.getName().substring(3);

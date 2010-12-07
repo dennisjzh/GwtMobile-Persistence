@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Zhihua (Dennis) Jiang.
+ * Copyright 2010 Zhihua (Dennis) Jiang
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.code.gwt.html5.database.persistence.client;
+package com.touchonmobile.gwtmobile.persistence.client;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
@@ -122,7 +122,7 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 	}
 	private native void destroyAll(JavaScriptObject nativeObject, Transaction tx, Callback callback) /*-{
 		nativeObject.destroyAll(tx, function() {
-			callback.@com.google.code.gwt.html5.database.persistence.client.Callback::onSuccess()();
+			callback.@com.touchonmobile.gwtmobile.persistence.client.Callback::onSuccess()();
 		})
 	}-*/;	
 
@@ -136,7 +136,7 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 	}
 	private native void count(JavaScriptObject nativeObject, CollectionImpl<T> self, Transaction tx, ScalarCallback<Integer> callback) /*-{
 		nativeObject.count(tx, function(n) {
-			self.@com.google.code.gwt.html5.database.persistence.client.CollectionImpl::processCallback(ILcom/google/code/gwt/html5/database/persistence/client/ScalarCallback;)(n, callback);
+			self.@com.touchonmobile.gwtmobile.persistence.client.CollectionImpl::processCallback(ILcom/touchonmobile/gwtmobile/persistence/client/ScalarCallback;)(n, callback);
 		})
 	}-*/;
 	
@@ -150,7 +150,7 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 	}
 	private native void list(JavaScriptObject nativeObject, CollectionImpl<T> self, Transaction tx, CollectionCallback<T> callback) /*-{
 		nativeObject.list(tx, function(results) {
-			self.@com.google.code.gwt.html5.database.persistence.client.CollectionImpl::processCallback(Lcom/google/gwt/core/client/JsArray;Lcom/google/code/gwt/html5/database/persistence/client/CollectionCallback;)(results, callback);
+			self.@com.touchonmobile.gwtmobile.persistence.client.CollectionImpl::processCallback(Lcom/google/gwt/core/client/JsArray;Lcom/touchonmobile/gwtmobile/persistence/client/CollectionCallback;)(results, callback);
 		})
 	}-*/;
 
@@ -164,7 +164,7 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 	}
 	private native void each(JavaScriptObject nativeObject, CollectionImpl<T> self, Transaction tx, ScalarCallback<T> callback) /*-{
 		nativeObject.each(tx, function(result) {
-			self.@com.google.code.gwt.html5.database.persistence.client.CollectionImpl::processCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/code/gwt/html5/database/persistence/client/ScalarCallback;)(result, callback);
+			self.@com.touchonmobile.gwtmobile.persistence.client.CollectionImpl::processCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/touchonmobile/gwtmobile/persistence/client/ScalarCallback;)(result, callback);
 		})
 	}-*/;	
 	
@@ -178,7 +178,7 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 	}
 	private native void one(JavaScriptObject nativeObject, CollectionImpl<T> self, Transaction tx, ScalarCallback<T> callback) /*-{
 		nativeObject.one(tx, function(result) {
-			self.@com.google.code.gwt.html5.database.persistence.client.CollectionImpl::processCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/code/gwt/html5/database/persistence/client/ScalarCallback;)(result, callback);
+			self.@com.touchonmobile.gwtmobile.persistence.client.CollectionImpl::processCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/touchonmobile/gwtmobile/persistence/client/ScalarCallback;)(result, callback);
 		})
 	}-*/;		
 	
