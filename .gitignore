@@ -2,3 +2,5 @@ lib
 classes
 *~
 war/gwt_gwt_persistence
+tomcat
+www-test
