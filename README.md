@@ -1,7 +1,7 @@
-gwt-mobile-persistence
+gwtmobile-persistence
 ===============
 
-gwt-mobile-persistence is an GWT wrapper of the Javascript object-relational mapper library [persistence.js](http://github.com/zefhemel/persistencejs). It provides client-side object persistence capability to GWT applications, a feature similar to what Hibernate provides for GWT applications on the server-side.
+gwtmobile-persistence is an GWT wrapper of the Javascript object-relational mapper library [persistence.js](http://github.com/zefhemel/persistencejs). It provides client-side object persistence capability to GWT applications, a feature similar to what Hibernate provides for GWT applications on the server-side.
 
 Schema definition
 -----------------
@@ -86,20 +86,20 @@ To create an object of the entity, use the `Entity<T>.newInstance` method. The r
 How to use
 ----------
 
-1. Import gwt-mobile-persistence project into Eclipse.
+1. Import gwtmobile-persistence project into Eclipse.
 
-* [Optional]Copy the latest persistence source code `lib/persistence.js`, `lib/persistence.store.sql.js` and `lib/persistence.store.websql.js` into folder `gwt-mobile-persistence/src/com/touchonmobile/gwtmobile/persistence/public`, replacing existing files.
+* [Optional]Copy the latest persistence source code `lib/persistence.js`, `lib/persistence.store.sql.js` and `lib/persistence.store.websql.js` into folder `gwtmobile-persistence/src/com/touchonmobile/gwtmobile/persistence/public`, replacing existing files.
 
-* In Eclipse, export gwt-mobile-persistence as an JAR file.
+* In Eclipse, export gwtmobile-persistence as an JAR file.
 
 * Create your GWT project in Eclipse.
 
-* Add the gwt-mobile-persistence JAR file as an external library to your project.
+* Add the gwtmobile-persistence JAR file as an external library to your project.
 
 * Update your project configure file (.gwt.xml) to include the following:
 
 		<script src="http://code.google.com/apis/gears/gears_init.js" />  <!-- Include this line only if you use Google Gears database.-->
-		<inherits name='com.touchonmobile.gwtmobile.persistence.gwt_mobile_persistence' />
+		<inherits name='com.touchonmobile.gwtmobile.persistence.gwtmobile_persistence' />
   
 * Now your GWT project is ready to persist objects to the brower database!
  
