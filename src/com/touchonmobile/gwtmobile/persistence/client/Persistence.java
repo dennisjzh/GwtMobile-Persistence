@@ -19,6 +19,7 @@ package com.touchonmobile.gwtmobile.persistence.client;
 import java.util.Map;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArray;
 
 public class Persistence {
 	
@@ -119,6 +120,43 @@ public class Persistence {
 		});
 	}-*/;
 
+	public static native void reset(Callback callback) /*-{
+		$wnd.persistence.reset(
+			function() {
+				callback.@com.touchonmobile.gwtmobile.persistence.client.Callback::onSuccess()();
+			}
+		);
+	}-*/;
+
+	@SuppressWarnings("unchecked")
+	public static void dumpToJson(Transaction transaction, Entity<?>[] entities, DumpCallback callback) {
+		JsArray<JavaScriptObject> entitiesArray = null;
+		if (entities != null) {
+			entitiesArray = (JsArray<JavaScriptObject>) JavaScriptObject.createArray();
+			for (int i = 0; i < entities.length; i++) {
+				EntityInternal<?> entity = (EntityInternal<?>) entities[i];
+				entitiesArray.set(i, entity.getNativeObject());
+			}
+		}
+		dumpToJsonNative(transaction, entitiesArray, callback);
+	}
+	
+	private static native void dumpToJsonNative(Transaction transaction, JsArray<JavaScriptObject> entities, DumpCallback callback) /*-{
+		$wnd.persistence.dumpToJson(transaction, entities,
+			function(result) {
+				callback.@com.touchonmobile.gwtmobile.persistence.client.DumpCallback::onSuccess(Ljava/lang/String;)(result);
+			}
+		);
+	}-*/;
+	
+	public static native void loadFromJson(Transaction transaction, String jsonDump, Callback callback) /*-{
+		$wnd.persistence.loadFromJson(transaction, jsonDump,
+			function() {
+				callback.@com.touchonmobile.gwtmobile.persistence.client.Callback::onSuccess()();
+			}
+		);
+	}-*/;
+	
 	private static JavaScriptObject Map2AssociativeArray(
 			Map<String, String> fields) {
 		JavaScriptObject assoArray = JavaScriptObject.createObject();
