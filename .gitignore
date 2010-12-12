@@ -1,7 +1,7 @@
 lib
 classes
 *~
-war/gwt_gwt_persistence
+war/com.*
 tomcat
 www-test
 .gwt-tmp

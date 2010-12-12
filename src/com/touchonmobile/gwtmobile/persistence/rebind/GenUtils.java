@@ -166,8 +166,7 @@ public class GenUtils {
 	}
 
 	public String getPackageName(String typeName) {
-        TypeOracle typeOracle = context.getTypeOracle();
-        final JClassType classType = typeOracle.findType(typeName);
+        final JClassType classType = getClassType(typeName);
         if (classType != null) {
         	return classType.getPackage().getName();
         }
@@ -175,8 +174,7 @@ public class GenUtils {
 	}
 
 	public String getClassName(String typeName) {
-        TypeOracle typeOracle = context.getTypeOracle();
-        final JClassType classType = typeOracle.findType(typeName);
+        final JClassType classType = getClassType(typeName);
         if (classType != null) {
         	return classType.getName();
         }
@@ -184,14 +182,14 @@ public class GenUtils {
 	}
 	
 	public Boolean isInterface(String typeName) {
-		if (typeName.indexOf('.') < 0) {
-			typeName = factory.getCreatedPackage() + "." + typeName;			
-		}
 		JClassType classType = getClassType(typeName);
 		return classType.isInterface() != null;
 	}
 	
 	public JClassType getClassType(String typeName) {
+		if (typeName.indexOf('.') < 0) {
+			typeName = factory.getCreatedPackage() + "." + typeName;			
+		}
         TypeOracle typeOracle = context.getTypeOracle();
         return typeOracle.findType(typeName);
 	}
@@ -236,9 +234,13 @@ public class GenUtils {
 			}
 			String methodName = method.getName();
 			if (methodName.startsWith("get")) {
+				String propertyName = methodName.substring(3);	// getId() is reserved. 
+				if (propertyName.equals("Id")) {
+					continue;
+				}
 				JType returnType = method.getReturnType();
 				String returnTypeName = returnType.getSimpleSourceName();
-				if (returnType.isPrimitive() != null && !returnTypeName.equals("long") 
+				if (returnType.isPrimitive() != null && !returnTypeName.equals("long")
 						|| returnTypeName.equals("String")
 						|| returnTypeName.equals("Date")
 						|| isSubclassOf(returnType, "JSONValue")) {

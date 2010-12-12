@@ -19,6 +19,8 @@ package com.touchonmobile.gwtmobile.persistence.rebind;
 import java.util.List;
 
 import com.google.gwt.core.ext.typeinfo.JMethod;
+import com.touchonmobile.gwtmobile.persistence.client.FetchCallback;
+import com.touchonmobile.gwtmobile.persistence.client.Persistable;
 
 public class InstanceGenerator implements ClassGenerator {
 
@@ -58,6 +60,65 @@ public class InstanceGenerator implements ClassGenerator {
 			@Override
 			public void generateMethod() {
 				utils.println("return nativeObject;");
+			}
+		});
+		
+		utils.generateMethod("public", "String", "getId", null,
+				new MethodGenerator() {			
+			@Override
+			public void generateMethod() {
+				utils.println("return getId(nativeObject);"); 
+			}
+		});
+		utils.generateNativeMethod("private", "String", "getId", 
+				new String[][]{{"JavaScriptObject", "nativeObject"}},
+				new MethodGenerator() {			
+			@Override
+			public void generateMethod() {
+				utils.println("return nativeObject.id;"); 
+			}
+		});
+		
+		utils.generateMethod("public", "<T extends Persistable> void", "fetch",
+				new String[][]{
+				{"Transaction", "transaction"},
+				{"Entity<T>", "entity"},
+				{"FetchCallback<T>", "callback"}},
+				new MethodGenerator() {			
+			@Override
+			public void generateMethod() {
+				utils.println("EntityInternal<T> entityInternal = (EntityInternal<T>)entity;");
+				utils.println("fetch(transaction, entityInternal.getEntityName(), entityInternal, callback, this, nativeObject);"); 
+			}
+		});
+		utils.generateNativeMethod("private", " <T extends Persistable> void", "fetch",
+				new String[][]{
+				{"Transaction", "transaction"},
+				{"String", "property"},
+				{"EntityInternal<T>", "entity"},
+				{"FetchCallback<T>", "callback"},
+				{requestedClassName + "Impl", "self"},
+				{"JavaScriptObject", "nativeObject"}},
+				new MethodGenerator() {			
+			@Override
+			public void generateMethod() {
+				utils.println("nativeObject.fetch(property, function(result) {");
+				utils.sw().indent();
+				utils.println("self.@%s.%s.%sImpl::processCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/touchonmobile/gwtmobile/persistence/client/EntityInternal;Lcom/touchonmobile/gwtmobile/persistence/client/FetchCallback;)(result, entity, callback);", 
+						utils.getPackageName(requestedClassName), generatedClassName, requestedClassName);
+				utils.sw().outdent();
+				utils.println("});");
+			}
+		});
+		utils.generateMethod("private", "<T extends Persistable> void", "processCallback",
+				new String[][]{
+				{"JavaScriptObject", "result"},
+				{"EntityInternal<T>", "entity"},
+				{"FetchCallback<T>", "callback"}},
+				new MethodGenerator() {			
+			@Override
+			public void generateMethod() {
+				utils.println("callback.onSuccess(entity.newInstance(result));");
 			}
 		});
 		

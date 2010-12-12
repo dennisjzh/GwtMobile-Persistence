@@ -16,8 +16,6 @@
 
 package com.touchonmobile.gwtmobile.persistence.client;
 
-
-public interface Persistable {
-	String getId();
-	<T extends Persistable> void fetch(Transaction transaction, Entity<T> entity, FetchCallback<T> callback);
+public interface FetchCallback<T extends Persistable> {
+	public void onSuccess(T instance);
 }

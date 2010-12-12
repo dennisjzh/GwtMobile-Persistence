@@ -24,4 +24,5 @@ public interface EntityInternal<T extends Persistable> extends Entity<T> {
 	public JavaScriptObject getNativeObject();
 	public Collection<T> newCollection(JavaScriptObject nativeCollection);
 	public String getInverseRelationName(String rel);
+	public String getEntityName();
 }

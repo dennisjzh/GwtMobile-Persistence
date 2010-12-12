@@ -11,6 +11,7 @@ import com.touchonmobile.gwtmobile.persistence.client.Collection;
 import com.touchonmobile.gwtmobile.persistence.client.CollectionCallback;
 import com.touchonmobile.gwtmobile.persistence.client.DumpCallback;
 import com.touchonmobile.gwtmobile.persistence.client.Entity;
+import com.touchonmobile.gwtmobile.persistence.client.FetchCallback;
 import com.touchonmobile.gwtmobile.persistence.client.Persistence;
 import com.touchonmobile.gwtmobile.persistence.client.ScalarCallback;
 import com.touchonmobile.gwtmobile.persistence.test.domain.Category;
@@ -85,6 +86,41 @@ public class TestPersistence extends GWTTestCase {
 						});
 			}
 		});						
+	}
+
+	public void testObjectId() {
+		setupTest(new Callback() {
+			public void onSuccess() {
+				taskEntity.all().one(new ScalarCallback<Task>() {					
+					@Override
+					public void onSuccess(Task result) {
+						System.out.print(result.getId());
+						assertEquals(32, result.getId().length());
+						tearDownTest();
+					}
+				});
+			}
+		});						
+	}
+
+	public void testObjectFetch() {
+		setupTest(new Callback() {
+			public void onSuccess() {				
+				taskEntity.all().list(new CollectionCallback<Task>() {					
+					@Override
+					public void onSuccess(Task[] results) {
+						results[0].fetch(null, categoryEntity, new FetchCallback<Category>() {
+							@Override
+							public void onSuccess(Category instance) {
+								System.out.print(instance.getName());
+								tearDownTest();
+							}
+						});
+					}
+				});
+			}
+		});
+		delayTestFinish(10000);
 	}
 
 	public void testDumpAndLoad() {

@@ -176,6 +176,14 @@ public class EntityGenerator implements ClassGenerator {
 						utils.println("return null;");
 					}});
 
+		utils.generateMethod("public", "String", "getEntityName", null,
+				new MethodGenerator() {
+			@Override
+			public void generateMethod() {
+				utils.println("return \"%s\";", requestedClassName);
+			}
+		});
+
 		utils.generateNativeMethod("private static", "JavaScriptObject", "newInstanceNative",
 				new String[][] {
 					{"JavaScriptObject", "nativeEntity"}, 
