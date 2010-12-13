@@ -16,6 +16,9 @@
 
 package com.touchonmobile.gwtmobile.persistence.client;
 
+
+import java.util.Date;
+
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 
@@ -29,40 +32,47 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 		this.nativeObject = nativeObject;
 		this.entity = entity;
 	}
-	
+
 	public Collection<T> newCollection(JavaScriptObject nativeObject) {
 		return new CollectionImpl<T>(nativeObject, entity);
 	}
-	
-	 @Override
-	 public Collection<T> filter(String property, String operator, boolean value) {
-	 return newCollection(filter(nativeObject, property, operator, value));
-	 }
-	 private native JavaScriptObject filter(JavaScriptObject nativeObject, String property, String operator, boolean value) /*-{
-	 return nativeObject.filter(property, operator, value);
-	 }-*/;
-	 @Override
-	 public Collection<T> filter(String property, String operator, int value) {
-	 return newCollection(filter(nativeObject, property, operator, value));
-	 }
-	 private native JavaScriptObject filter(JavaScriptObject nativeObject, String property, String operator, int value) /*-{
-	 return nativeObject.filter(property, operator, value);
-	 }-*/;
-	 @Override
-	 public Collection<T> filter(String property, String operator, float value) {
-	 return newCollection(filter(nativeObject, property, operator, value));
-	 }
-	 private native JavaScriptObject filter(JavaScriptObject nativeObject, String property, String operator, float value) /*-{
-	 return nativeObject.filter(property, operator, value);
-	 }-*/;
-	 @Override
-	 public Collection<T> filter(String property, String operator, String value) {
-	 return newCollection(filter(nativeObject, property, operator, value));
-	 }
-	 private native JavaScriptObject filter(JavaScriptObject nativeObject, String property, String operator, String value) /*-{
-	 return nativeObject.filter(property, operator, value);
-	 }-*/;
 
+	@Override
+	public Collection<T> filter(String property, String operator, boolean value) {
+		return newCollection(filter(nativeObject, property, operator, value));
+	}
+	private native JavaScriptObject filter(JavaScriptObject nativeObject, String property, String operator, boolean value) /*-{
+	 	return nativeObject.filter(property, operator, value);
+	}-*/;
+	@Override
+	public Collection<T> filter(String property, String operator, char value) {
+		return newCollection(filter(nativeObject, property, operator, new String(new char[] {value})));
+	}
+	@Override
+	public Collection<T> filter(String property, String operator, int value) {
+		return newCollection(filter(nativeObject, property, operator, value));
+	}
+	private native JavaScriptObject filter(JavaScriptObject nativeObject, String property, String operator, int value) /*-{
+		return nativeObject.filter(property, operator, value);
+	}-*/;
+	@Override
+	public Collection<T> filter(String property, String operator, double value) {
+		return newCollection(filter(nativeObject, property, operator, value));
+	}
+	private native JavaScriptObject filter(JavaScriptObject nativeObject, String property, String operator, double value) /*-{
+		return nativeObject.filter(property, operator, value);
+	}-*/;
+	@Override
+	public Collection<T> filter(String property, String operator, String value) {
+		return newCollection(filter(nativeObject, property, operator, value));
+	}
+	private native JavaScriptObject filter(JavaScriptObject nativeObject, String property, String operator, String value) /*-{
+		return nativeObject.filter(property, operator, value);
+	}-*/;
+	@Override
+	public Collection<T> filter(String property, String operator, Date value) {
+		return newCollection(filter(nativeObject, property, operator, (double)value.getTime()));
+	}
 
 	@Override
 	public Collection<T> order(String property, boolean ascending) {
@@ -71,7 +81,7 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 	private native JavaScriptObject order(JavaScriptObject nativeObject, String property, boolean ascending) /*-{
 		return nativeObject.order(property, ascending);
 	}-*/;
-	
+
 	@Override
 	public Collection<T> limit(int n) {
 		return newCollection(limit(nativeObject, n));
@@ -79,7 +89,7 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 	private native JavaScriptObject limit(JavaScriptObject nativeObject, int n) /*-{
 		return nativeObject.limit(n);
 	}-*/;
-	
+
 	@Override
 	public Collection<T> skip(int n) {
 		return newCollection(skip(nativeObject, n));
@@ -87,7 +97,7 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 	private native JavaScriptObject skip(JavaScriptObject nativeObject, int n) /*-{
 		return nativeObject.skip(n);
 	}-*/;
-	
+
 	@Override
 	public Collection<T> prefetch(String rel) {
 		return newCollection(prefetch(nativeObject, rel));
@@ -95,7 +105,7 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 	private native JavaScriptObject prefetch(JavaScriptObject nativeObject, String rel) /*-{
 		return nativeObject.prefetch(rel);
 	}-*/;
-	
+
 	@Override
 	public void add(T obj) {
 		add(nativeObject, ((PersistableInternal)obj).getNativeObject());
@@ -139,7 +149,7 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 			self.@com.touchonmobile.gwtmobile.persistence.client.CollectionImpl::processCallback(ILcom/touchonmobile/gwtmobile/persistence/client/ScalarCallback;)(n, callback);
 		})
 	}-*/;
-	
+
 	@Override
 	public void list(Transaction tx, CollectionCallback<T> callback) {
 		list(nativeObject, this, tx, callback);
@@ -167,7 +177,7 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 			self.@com.touchonmobile.gwtmobile.persistence.client.CollectionImpl::processCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/touchonmobile/gwtmobile/persistence/client/ScalarCallback;)(result, callback);
 		})
 	}-*/;	
-	
+
 	@Override
 	public void one(Transaction tx, ScalarCallback<T> callback) {
 		one(nativeObject, this, tx, callback);
@@ -181,7 +191,7 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 			self.@com.touchonmobile.gwtmobile.persistence.client.CollectionImpl::processCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/touchonmobile/gwtmobile/persistence/client/ScalarCallback;)(result, callback);
 		})
 	}-*/;		
-	
+
 	@SuppressWarnings("unused")
 	private void processCallback(JsArray<JavaScriptObject> results, CollectionCallback<T> callback) {
 		T[] array = entity.newInstanceArray(results.length());

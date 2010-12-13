@@ -86,6 +86,90 @@ public class TestPersistence extends GWTTestCase {
 		});						
 	}
 	
+	public void testFilterChar() {
+		setupTest(new Callback() {
+			public void onSuccess() {
+				taskEntity.all().filter("Alphabet", ">", 'A').count(new ScalarCallback<Integer>() {					
+					@Override
+					public void onSuccess(Integer result) {
+						assertEquals(2, result.intValue());
+						tearDownTest();
+					}
+				});
+			}
+		});						
+	}
+	
+	public void testFilterBoolean() {
+		setupTest(new Callback() {
+			public void onSuccess() {
+				taskEntity.all().filter("Done", "=", true).count(new ScalarCallback<Integer>() {					
+					@Override
+					public void onSuccess(Integer result) {
+						assertEquals(3, result.intValue());
+						tearDownTest();
+					}
+				});
+			}
+		});						
+	}
+	
+	public void testFilterInteger() {
+		setupTest(new Callback() {
+			public void onSuccess() {
+				taskEntity.all().filter("Priority", ">=", 4).count(new ScalarCallback<Integer>() {					
+					@Override
+					public void onSuccess(Integer result) {
+						assertEquals(1, result.intValue());
+						tearDownTest();
+					}
+				});
+			}
+		});						
+	}
+	
+	public void testFilterDouble() {
+		setupTest(new Callback() {
+			public void onSuccess() {
+				taskEntity.all().filter("Profit", ">", 1.0).count(new ScalarCallback<Integer>() {					
+					@Override
+					public void onSuccess(Integer result) {
+						assertEquals(2, result.intValue());
+						tearDownTest();
+					}
+				});
+			}
+		});						
+	}
+	
+	public void testFilterString() {
+		setupTest(new Callback() {
+			public void onSuccess() {
+				taskEntity.all().filter("Name", "=", "Task2").count(new ScalarCallback<Integer>() {					
+					@Override
+					public void onSuccess(Integer result) {
+						assertEquals(1, result.intValue());
+						tearDownTest();
+					}
+				});
+			}
+		});						
+	}
+
+	public void testFilterDate() {
+		setupTest(new Callback() {
+			public void onSuccess() {
+				taskEntity.all().filter("CompleteDate", "<", new Date()).count(new ScalarCallback<Integer>() {					
+					@Override
+					public void onSuccess(Integer result) {
+						assertEquals(3, result.intValue());
+						tearDownTest();
+					}
+				});
+			}
+		});						
+	}
+	
 	public void testEntityFindByChar() {
 		setupTest(new Callback() {
 			public void onSuccess() {
