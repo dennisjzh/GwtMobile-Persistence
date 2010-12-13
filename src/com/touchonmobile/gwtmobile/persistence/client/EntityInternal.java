@@ -31,6 +31,9 @@ public abstract class EntityInternal<T extends Persistable> implements Entity<T>
 	public void load(Transaction transaction, String id, ScalarCallback<T> callback) {
 		load(transaction, id, callback, getNativeObject(), this);
 	}	
+	public void load(String id, ScalarCallback<T> callback) {
+		load(null, id, callback, getNativeObject(), this);
+	}	
 	private native void load(Transaction transaction, String id, ScalarCallback<T> callback, JavaScriptObject nativeObject, EntityInternal<T> self) /*-{
 		nativeObject.load($wnd.persistence, transaction, id, function(result) {
 			self.@com.touchonmobile.gwtmobile.persistence.client.EntityInternal::processwLoadCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/touchonmobile/gwtmobile/persistence/client/ScalarCallback;)(result, callback);
@@ -44,20 +47,38 @@ public abstract class EntityInternal<T extends Persistable> implements Entity<T>
 	public void findBy(Transaction transaction, String property, boolean value, ScalarCallback<T> callback) {
 		findBy(transaction, property, value, callback, getNativeObject(), this);
 	}
+	public void findBy(String property, boolean value, ScalarCallback<T> callback) {
+		findBy(null, property, value, callback, getNativeObject(), this);
+	}
 	public void findBy(Transaction transaction, String property, char value, ScalarCallback<T> callback) {
 		findBy(transaction, property, new String(new char[] {value}), callback, getNativeObject(), this);
+	}
+	public void findBy(String property, char value, ScalarCallback<T> callback) {
+		findBy(null, property, new String(new char[] {value}), callback, getNativeObject(), this);
 	}
 	public void findBy(Transaction transaction, String property, int value, ScalarCallback<T> callback) {
 		findBy(transaction, property, value, callback, getNativeObject(), this);
 	}
+	public void findBy(String property, int value, ScalarCallback<T> callback) {
+		findBy(null, property, value, callback, getNativeObject(), this);
+	}
 	public void findBy(Transaction transaction, String property, double value, ScalarCallback<T> callback) {
 		findBy(transaction, property, value, callback, getNativeObject(), this);
+	}
+	public void findBy(String property, double value, ScalarCallback<T> callback) {
+		findBy(null, property, value, callback, getNativeObject(), this);
 	}
 	public void findBy(Transaction transaction, String property, String value, ScalarCallback<T> callback) {
 		findBy(transaction, property, value, callback, getNativeObject(), this);
 	}
+	public void findBy(String property, String value, ScalarCallback<T> callback) {
+		findBy(null, property, value, callback, getNativeObject(), this);
+	}
 	public void findBy(Transaction transaction, String property, Date value, ScalarCallback<T> callback) {
 		findBy(transaction, property, value.getTime(), callback, getNativeObject(), this);
+	}
+	public void findBy(String property, Date value, ScalarCallback<T> callback) {
+		findBy(null, property, value.getTime(), callback, getNativeObject(), this);
 	}
 	private native void findBy(Transaction transaction, String property, boolean value, ScalarCallback<T> callback, JavaScriptObject nativeObject, EntityInternal<T> self) /*-{
 		nativeObject.findBy($wnd.persistence, transaction, property, value, function(result) {

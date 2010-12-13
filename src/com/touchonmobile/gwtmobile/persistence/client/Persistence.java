@@ -140,6 +140,9 @@ public class Persistence {
 		}
 		dumpToJsonNative(transaction, entitiesArray, callback);
 	}
+	public static void dumpToJson(Entity<?>[] entities, ScalarCallback<String> callback) {
+		dumpToJson(null, entities, callback);
+	}
 	
 	private static native void dumpToJsonNative(Transaction transaction, JsArray<JavaScriptObject> entities, ScalarCallback<String> callback) /*-{
 		$wnd.persistence.dumpToJson(transaction, entities,

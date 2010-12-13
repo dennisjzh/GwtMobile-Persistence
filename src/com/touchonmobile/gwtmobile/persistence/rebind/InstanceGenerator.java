@@ -89,6 +89,16 @@ public class InstanceGenerator implements ClassGenerator {
 				utils.println("fetch(transaction, entityInternal.getEntityName(), entityInternal, callback, this, nativeObject);"); 
 			}
 		});
+		utils.generateMethod("public", "<T extends Persistable> void", "fetch",
+				new String[][]{
+				{"Entity<T>", "entity"},
+				{"ScalarCallback<T>", "callback"}},
+				new MethodGenerator() {			
+			@Override
+			public void generateMethod() {
+				utils.println("fetch(null, entity, callback);"); 
+			}
+		});
 		utils.generateNativeMethod("private", " <T extends Persistable> void", "fetch",
 				new String[][]{
 				{"Transaction", "transaction"},
@@ -140,6 +150,16 @@ public class InstanceGenerator implements ClassGenerator {
 				utils.sw().outdent();				
 				utils.println("}");
 				utils.println("selectJSON(transaction, jsArray, callback, this, nativeObject);");
+			}
+		});
+		utils.generateMethod("public", "void", "selectJSON",
+				new String[][]{
+				{"String[]", "propertySpec"},
+				{"ScalarCallback<String>", "callback"}},
+				new MethodGenerator() {			
+			@Override
+			public void generateMethod() {
+				utils.println("selectJSON(null, propertySpec, callback);");
 			}
 		});
 		utils.generateNativeMethod("private", "void", "selectJSON",
@@ -234,9 +254,6 @@ public class InstanceGenerator implements ClassGenerator {
 							else if (isJsonReturnType) {
 								utils.println("set" + getter.getName().substring(3) + "(value == null ? null : value.toString(), nativeObject);");
 							}
-//							else if (isCharReturnType) {
-//								utils.println("set" + getter.getName().substring(3) + "(new String(new char[] {value}), nativeObject);");
-//							}
 							else {
 								utils.println("set" + getter.getName().substring(3) + "(value, nativeObject);");
 							}
@@ -244,7 +261,7 @@ public class InstanceGenerator implements ClassGenerator {
 			utils.generateNativeMethod("private", "void", "set" + getter.getName().substring(3), 
 					new String[][]{
 						{isDateReturnType ? "double" : 
-							isJsonReturnType/* || isCharReturnType*/ ? "String" : 
+							isJsonReturnType ? "String" : 
 							returnTypeName, "value"},
 						{"JavaScriptObject", "nativeObject"}},
 					new MethodGenerator(){

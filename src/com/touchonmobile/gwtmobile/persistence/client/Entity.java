@@ -22,13 +22,20 @@ public interface Entity<T extends Persistable> {
 	public T newInstance();
 	public Collection<T> all();
 	public void load(Transaction transaction, String id, ScalarCallback<T> callback);
+	public void load(String id, ScalarCallback<T> callback);
 	// It sucks that Java does not support generics on primitive types...
 	public void findBy(Transaction transaction, String property, boolean value, ScalarCallback<T> callback);
+	public void findBy(String property, boolean value, ScalarCallback<T> callback);
 	public void findBy(Transaction transaction, String property, char value, ScalarCallback<T> callback);
+	public void findBy(String property, char value, ScalarCallback<T> callback);
 	// also cover byte and short.
 	public void findBy(Transaction transaction, String property, int value, ScalarCallback<T> callback);
+	public void findBy(String property, int value, ScalarCallback<T> callback);
 	// also cover float and long.	
 	public void findBy(Transaction transaction, String property, double value, ScalarCallback<T> callback);
+	public void findBy(String property, double value, ScalarCallback<T> callback);
 	public void findBy(Transaction transaction, String property, String value, ScalarCallback<T> callback);
+	public void findBy(String property, String value, ScalarCallback<T> callback);
 	public void findBy(Transaction transaction, String property, Date value, ScalarCallback<T> callback);
+	public void findBy(String property, Date value, ScalarCallback<T> callback);
 }
