@@ -10,7 +10,6 @@ import com.touchonmobile.gwtmobile.persistence.client.Callback;
 import com.touchonmobile.gwtmobile.persistence.client.Collection;
 import com.touchonmobile.gwtmobile.persistence.client.CollectionCallback;
 import com.touchonmobile.gwtmobile.persistence.client.Entity;
-import com.touchonmobile.gwtmobile.persistence.client.ScalarCallback;
 import com.touchonmobile.gwtmobile.persistence.client.Persistence;
 import com.touchonmobile.gwtmobile.persistence.client.ScalarCallback;
 import com.touchonmobile.gwtmobile.persistence.test.domain.Category;
@@ -86,8 +85,141 @@ public class TestPersistence extends GWTTestCase {
 			}
 		});						
 	}
+	
+	public void testEntityFindByChar() {
+		setupTest(new Callback() {
+			public void onSuccess() {
+				taskEntity.findBy(null, "Alphabet", 'C', new ScalarCallback<Task>(){
+					@Override
+					public void onSuccess(final Task result1) {
+						assertNotNull(result1);
+						System.out.println(result1.getAlphabet());
+						taskEntity.load(null, result1.getId(), new ScalarCallback<Task>() {					
+							@Override
+							public void onSuccess(Task result2) {
+								assertNotNull(result2);
+								assertEquals(result1.getAlphabet(), result2.getAlphabet());
+								tearDownTest();
+							}
+						});
+					}});
+				
+			}
+		});
+	}
 
-	public void testObjectId() {
+	public void testEntityFindByDate() {
+		setupTest(new Callback() {
+			@SuppressWarnings("deprecation")
+			public void onSuccess() {
+				taskEntity.findBy(null, "CompleteDate", new Date("2010/12/01"), new ScalarCallback<Task>(){
+					@Override
+					public void onSuccess(final Task result1) {
+						assertNotNull(result1);
+						System.out.println(result1.getCompleteDate().toString());
+						taskEntity.load(null, result1.getId(), new ScalarCallback<Task>() {					
+							@Override
+							public void onSuccess(Task result2) {
+								assertNotNull(result2);
+								assertEquals(result1.getCompleteDate(), result2.getCompleteDate());								
+								tearDownTest();
+							}
+						});
+					}});
+				
+			}
+		});
+	}
+	
+	public void testEntityFindByInteger() {
+		setupTest(new Callback() {
+			public void onSuccess() {
+				taskEntity.findBy(null, "Priority", 2, new ScalarCallback<Task>(){
+					@Override
+					public void onSuccess(final Task result1) {
+						assertNotNull(result1);
+						System.out.println(result1.getPriority());
+						taskEntity.load(null, result1.getId(), new ScalarCallback<Task>() {					
+							@Override
+							public void onSuccess(Task result2) {
+								assertNotNull(result2);
+								assertEquals(result1.getPriority(), result2.getPriority());								
+								tearDownTest();
+							}
+						});
+					}});
+				
+			}
+		});
+	}
+	
+	public void testEntityFindByDouble() {
+		setupTest(new Callback() {
+			public void onSuccess() {
+				taskEntity.findBy(null, "Profit", 24.68, new ScalarCallback<Task>(){
+					@Override
+					public void onSuccess(final Task result1) {
+						assertNotNull(result1);
+						System.out.println(result1.getProfit());
+						taskEntity.load(null, result1.getId(), new ScalarCallback<Task>() {					
+							@Override
+							public void onSuccess(Task result2) {
+								assertNotNull(result2);
+								assertEquals(result1.getProfit(), result2.getProfit());								
+								tearDownTest();
+							}
+						});
+					}});
+				
+			}
+		});
+	}
+	
+	public void testEntityFindByString() {
+		setupTest(new Callback() {
+			public void onSuccess() {
+				taskEntity.findBy(null, "Name", "Task3", new ScalarCallback<Task>(){
+					@Override
+					public void onSuccess(final Task result1) {
+						assertNotNull(result1);
+						System.out.println(result1.getName());
+						taskEntity.load(null, result1.getId(), new ScalarCallback<Task>() {					
+							@Override
+							public void onSuccess(Task result2) {
+								assertNotNull(result2);
+								assertEquals(result1.getName(), result2.getName());								
+								tearDownTest();
+							}
+						});
+					}});
+				
+			}
+		});
+	}
+	
+	public void testEntityFindByBoolean() {
+		setupTest(new Callback() {
+			public void onSuccess() {
+				taskEntity.findBy(null, "Done", true, new ScalarCallback<Task>(){
+					@Override
+					public void onSuccess(final Task result1) {
+						assertNotNull(result1);
+						System.out.println(result1.getDone());
+						taskEntity.load(null, result1.getId(), new ScalarCallback<Task>() {					
+							@Override
+							public void onSuccess(Task result2) {
+								assertNotNull(result2);
+								assertEquals(result1.getDone(), result2.getDone());								
+								tearDownTest();
+							}
+						});
+					}});
+				
+			}
+		});
+	}
+	
+	public void testInstanceId() {
 		setupTest(new Callback() {
 			public void onSuccess() {
 				taskEntity.all().one(new ScalarCallback<Task>() {					
@@ -102,7 +234,7 @@ public class TestPersistence extends GWTTestCase {
 		});						
 	}
 
-	public void testObjectFetch() {
+	public void testInstanceFetch() {
 		setupTest(new Callback() {
 			public void onSuccess() {				
 				taskEntity.all().list(new CollectionCallback<Task>() {					
@@ -121,7 +253,7 @@ public class TestPersistence extends GWTTestCase {
 		});
 	}
 
-	public void testObjectSelectJSON() {
+	public void testInstanceSelectJSON() {
 		setupTest(new Callback() {
 			public void onSuccess() {				
 				taskEntity.all().list(new CollectionCallback<Task>() {					
@@ -190,6 +322,7 @@ public class TestPersistence extends GWTTestCase {
 			categoryEntity = GWT.create(Category.class);
 
 			Persistence.schemaSync(new Callback() {
+				@SuppressWarnings("deprecation")
 				public void onSuccess() 
 				{
 					final Category c = categoryEntity.newInstance();
@@ -203,7 +336,7 @@ public class TestPersistence extends GWTTestCase {
 						t.setDescription("Task No #" + Integer.toString(i));
 						if (i % 2 == 0) {
 							t.setDone(true);
-							t.setCompleteDate(new Date());
+							t.setCompleteDate(new Date(2010 - 1900, 12 - 1, 1 + i));
 							t.setPriority(i);
 							t.setPercentage((float)i / 10);
 							t.setProfit((double)i * 12.34);
@@ -216,7 +349,7 @@ public class TestPersistence extends GWTTestCase {
 					Persistence.flush(callback);
 				}
 			});
-		delayTestFinish(10000);
+		delayTestFinish(5000);
 	}
 	
 	private void tearDownTest() {

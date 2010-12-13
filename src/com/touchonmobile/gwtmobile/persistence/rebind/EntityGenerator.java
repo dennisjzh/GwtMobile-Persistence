@@ -41,7 +41,7 @@ public class EntityGenerator implements ClassGenerator {
 	@Override
 	public void classSetup() {
 		AddImports();
-		AddImplementedInterfaces();
+		setSuperClass();
 	}
 	private void AddImports() {
 		utils.factory().addImport("java.util.HashMap");
@@ -52,8 +52,8 @@ public class EntityGenerator implements ClassGenerator {
 		utils.factory().addImport("com.google.gwt.json.client.*");
 		utils.factory().addImport("com.touchonmobile.gwtmobile.persistence.client.*");
 	}
-	private void AddImplementedInterfaces() {
-		utils.factory().addImplementedInterface("EntityInternal<" + requestedClassName + ">");
+	private void setSuperClass() {
+		utils.factory().setSuperclass("EntityInternal<" + requestedClassName + ">");
 	}			
 	private void AddVariables() {
 		StringBuilder sb = new StringBuilder();

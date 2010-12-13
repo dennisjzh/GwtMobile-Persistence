@@ -100,7 +100,7 @@ public class InstanceGenerator implements ClassGenerator {
 				new MethodGenerator() {			
 			@Override
 			public void generateMethod() {
-				utils.println("nativeObject.fetch(property, function(result) {");
+				utils.println("nativeObject.fetch($wnd.persistence, transaction, property, function(result) {");
 				utils.sw().indent();
 				utils.println("self.@%s.%s.%sImpl::processFetchCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/touchonmobile/gwtmobile/persistence/client/EntityInternal;Lcom/touchonmobile/gwtmobile/persistence/client/ScalarCallback;)(result, entity, callback);", 
 						utils.getPackageName(requestedClassName), generatedClassName, requestedClassName);
@@ -176,7 +176,8 @@ public class InstanceGenerator implements ClassGenerator {
 			//TODO: is getter method always public?
 			final String returnTypeName = getter.getReturnType().getSimpleSourceName();
 			final boolean isDateReturnType = returnTypeName.equals("Date");
-			final boolean isPrimitiveType = getter.getReturnType().isPrimitive() != null;
+			final boolean isPrimitiveReturnType = getter.getReturnType().isPrimitive() != null;
+			final boolean isCharReturnType = returnTypeName.equals("char");
 			final boolean isJsonReturnType = utils.isSubclassOf(getter.getReturnType(), "JSONValue");
 			utils.generateMethod("public", returnTypeName, getter.getName(), 
 					null, new MethodGenerator(){
@@ -184,7 +185,7 @@ public class InstanceGenerator implements ClassGenerator {
 						public void generateMethod() {
 							if (isDateReturnType) {
 								utils.println("long value = (long)" + getter.getName() + "(nativeObject);");
-								//TODO: now assume the actual date is not "the epoch".
+								//TODO: assume that the actual date is not "the epoch" for now.
 								utils.println("return (value == 0) ? null : new Date(value);"); 																			
 							}
 							else if (isJsonReturnType) {
@@ -204,7 +205,11 @@ public class InstanceGenerator implements ClassGenerator {
 						@Override
 						public void generateMethod() {
 							utils.println("var value = nativeObject." + getter.getName().substring(3) + ";");
-							if (isPrimitiveType) {
+							//CHAR in SQLite has TEXT affinity.  
+							if (isCharReturnType) {
+								utils.println("return (value == null || value.length == 0) ? 0 : value.charCodeAt(0);"); 											
+							}
+							else if (isPrimitiveReturnType) {
 								utils.println("return (value == null) ? 0 : value;"); 											
 							}
 							else if (isDateReturnType) {
@@ -229,6 +234,9 @@ public class InstanceGenerator implements ClassGenerator {
 							else if (isJsonReturnType) {
 								utils.println("set" + getter.getName().substring(3) + "(value == null ? null : value.toString(), nativeObject);");
 							}
+//							else if (isCharReturnType) {
+//								utils.println("set" + getter.getName().substring(3) + "(new String(new char[] {value}), nativeObject);");
+//							}
 							else {
 								utils.println("set" + getter.getName().substring(3) + "(value, nativeObject);");
 							}
@@ -236,7 +244,7 @@ public class InstanceGenerator implements ClassGenerator {
 			utils.generateNativeMethod("private", "void", "set" + getter.getName().substring(3), 
 					new String[][]{
 						{isDateReturnType ? "double" : 
-							isJsonReturnType ? "String" : 
+							isJsonReturnType/* || isCharReturnType*/ ? "String" : 
 							returnTypeName, "value"},
 						{"JavaScriptObject", "nativeObject"}},
 					new MethodGenerator(){
@@ -247,6 +255,9 @@ public class InstanceGenerator implements ClassGenerator {
 							}
 							else if (isJsonReturnType) {
 								utils.println("nativeObject." + getter.getName().substring(3) + " = (value == null) ? null : JSON.parse(value);");
+							}
+							else if (isCharReturnType) {
+								utils.println("nativeObject." + getter.getName().substring(3) + " = String.fromCharCode(value);");
 							}
 							else {
 								utils.println("nativeObject." + getter.getName().substring(3) + " = value;");

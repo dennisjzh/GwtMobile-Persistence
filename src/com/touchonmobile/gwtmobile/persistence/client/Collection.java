@@ -18,6 +18,8 @@ package com.touchonmobile.gwtmobile.persistence.client;
 
 public interface Collection<T extends Persistable>{
 
+	// Java amazingly does not support generics on primitive types...
+	// TODO: where is date?
 	public Collection<T> filter(String property, String operator, boolean value);
 	public Collection<T> filter(String property, String operator, int value);
 	public Collection<T> filter(String property, String operator, float value);
