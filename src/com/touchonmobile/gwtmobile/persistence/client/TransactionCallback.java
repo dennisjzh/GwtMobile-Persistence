@@ -18,5 +18,4 @@ package com.touchonmobile.gwtmobile.persistence.client;
 
 public interface TransactionCallback {
 	  void onSuccess(Transaction transaction);
-//	  void onTransactionSuccess();
 }

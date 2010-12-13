@@ -19,8 +19,6 @@ package com.touchonmobile.gwtmobile.persistence.rebind;
 import java.util.List;
 
 import com.google.gwt.core.ext.typeinfo.JMethod;
-import com.touchonmobile.gwtmobile.persistence.client.FetchCallback;
-import com.touchonmobile.gwtmobile.persistence.client.Persistable;
 
 public class InstanceGenerator implements ClassGenerator {
 
@@ -83,7 +81,7 @@ public class InstanceGenerator implements ClassGenerator {
 				new String[][]{
 				{"Transaction", "transaction"},
 				{"Entity<T>", "entity"},
-				{"FetchCallback<T>", "callback"}},
+				{"ScalarCallback<T>", "callback"}},
 				new MethodGenerator() {			
 			@Override
 			public void generateMethod() {
@@ -96,7 +94,7 @@ public class InstanceGenerator implements ClassGenerator {
 				{"Transaction", "transaction"},
 				{"String", "property"},
 				{"EntityInternal<T>", "entity"},
-				{"FetchCallback<T>", "callback"},
+				{"ScalarCallback<T>", "callback"},
 				{requestedClassName + "Impl", "self"},
 				{"JavaScriptObject", "nativeObject"}},
 				new MethodGenerator() {			
@@ -104,21 +102,73 @@ public class InstanceGenerator implements ClassGenerator {
 			public void generateMethod() {
 				utils.println("nativeObject.fetch(property, function(result) {");
 				utils.sw().indent();
-				utils.println("self.@%s.%s.%sImpl::processCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/touchonmobile/gwtmobile/persistence/client/EntityInternal;Lcom/touchonmobile/gwtmobile/persistence/client/FetchCallback;)(result, entity, callback);", 
+				utils.println("self.@%s.%s.%sImpl::processFetchCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/touchonmobile/gwtmobile/persistence/client/EntityInternal;Lcom/touchonmobile/gwtmobile/persistence/client/ScalarCallback;)(result, entity, callback);", 
 						utils.getPackageName(requestedClassName), generatedClassName, requestedClassName);
 				utils.sw().outdent();
 				utils.println("});");
 			}
 		});
-		utils.generateMethod("private", "<T extends Persistable> void", "processCallback",
+		utils.generateMethod("private", "<T extends Persistable> void", "processFetchCallback",
 				new String[][]{
 				{"JavaScriptObject", "result"},
 				{"EntityInternal<T>", "entity"},
-				{"FetchCallback<T>", "callback"}},
+				{"ScalarCallback<T>", "callback"}},
 				new MethodGenerator() {			
 			@Override
 			public void generateMethod() {
 				utils.println("callback.onSuccess(entity.newInstance(result));");
+			}
+		});
+		
+		utils.generateMethod("public", "void", "selectJSON",
+				new String[][]{
+				{"Transaction", "transaction"},
+				{"String[]", "propertySpec"},
+				{"ScalarCallback<String>", "callback"}},
+				new MethodGenerator() {			
+			@Override
+			public void generateMethod() {
+				utils.println("JsArrayString jsArray = null;");
+				utils.println("if (propertySpec != null) {");
+				utils.sw().indent();				
+				utils.println("jsArray = (JsArrayString) JavaScriptObject.createArray();");
+				utils.println("for (int i = 0; i < propertySpec.length; i++) {");
+				utils.println("String spec = propertySpec[i];");
+				utils.println("jsArray.set(i, spec);");
+				utils.sw().outdent();				
+				utils.println("}");
+				utils.sw().outdent();				
+				utils.println("}");
+				utils.println("selectJSON(transaction, jsArray, callback, this, nativeObject);");
+			}
+		});
+		utils.generateNativeMethod("private", "void", "selectJSON",
+				new String[][]{
+				{"Transaction", "transaction"},
+				{"JsArrayString", "propertySpec"},
+				{"ScalarCallback<String>", "callback"},
+				{requestedClassName + "Impl", "self"},
+				{"JavaScriptObject", "nativeObject"}},
+				new MethodGenerator() {			
+			@Override
+			public void generateMethod() {
+				utils.println("nativeObject.selectJSON(transaction, propertySpec, function(result) {");
+				utils.sw().indent();
+				utils.println("var resultJson = $wnd.JSON.stringify(result);");
+				utils.println("self.@%s.%s.%sImpl::processStringCallback(Ljava/lang/String;Lcom/touchonmobile/gwtmobile/persistence/client/ScalarCallback;)(resultJson, callback);", 
+						utils.getPackageName(requestedClassName), generatedClassName, requestedClassName);
+				utils.sw().outdent();
+				utils.println("});");
+			}
+		});
+		utils.generateMethod("private", "void", "processStringCallback",
+				new String[][]{
+				{"String", "result"},
+				{"ScalarCallback<String>", "callback"}},
+				new MethodGenerator() {			
+			@Override
+			public void generateMethod() {
+				utils.println("callback.onSuccess(result);");
 			}
 		});
 		

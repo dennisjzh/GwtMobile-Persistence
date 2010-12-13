@@ -129,7 +129,7 @@ public class Persistence {
 	}-*/;
 
 	@SuppressWarnings("unchecked")
-	public static void dumpToJson(Transaction transaction, Entity<?>[] entities, DumpCallback callback) {
+	public static void dumpToJson(Transaction transaction, Entity<?>[] entities, ScalarCallback<String> callback) {
 		JsArray<JavaScriptObject> entitiesArray = null;
 		if (entities != null) {
 			entitiesArray = (JsArray<JavaScriptObject>) JavaScriptObject.createArray();
@@ -141,13 +141,18 @@ public class Persistence {
 		dumpToJsonNative(transaction, entitiesArray, callback);
 	}
 	
-	private static native void dumpToJsonNative(Transaction transaction, JsArray<JavaScriptObject> entities, DumpCallback callback) /*-{
+	private static native void dumpToJsonNative(Transaction transaction, JsArray<JavaScriptObject> entities, ScalarCallback<String> callback) /*-{
 		$wnd.persistence.dumpToJson(transaction, entities,
 			function(result) {
-				callback.@com.touchonmobile.gwtmobile.persistence.client.DumpCallback::onSuccess(Ljava/lang/String;)(result);
+				@com.touchonmobile.gwtmobile.persistence.client.Persistence::processStringCallback(Ljava/lang/String;Lcom/touchonmobile/gwtmobile/persistence/client/ScalarCallback;)(result, callback);
 			}
 		);
 	}-*/;
+	
+	@SuppressWarnings("unused")
+	private static void processStringCallback(String result, ScalarCallback<String> callback) {
+		callback.onSuccess(result);
+	}
 	
 	public static native void loadFromJson(Transaction transaction, String jsonDump, Callback callback) /*-{
 		$wnd.persistence.loadFromJson(transaction, jsonDump,

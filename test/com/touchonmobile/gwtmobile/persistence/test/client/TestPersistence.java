@@ -9,9 +9,8 @@ import com.google.gwt.junit.client.GWTTestCase;
 import com.touchonmobile.gwtmobile.persistence.client.Callback;
 import com.touchonmobile.gwtmobile.persistence.client.Collection;
 import com.touchonmobile.gwtmobile.persistence.client.CollectionCallback;
-import com.touchonmobile.gwtmobile.persistence.client.DumpCallback;
 import com.touchonmobile.gwtmobile.persistence.client.Entity;
-import com.touchonmobile.gwtmobile.persistence.client.FetchCallback;
+import com.touchonmobile.gwtmobile.persistence.client.ScalarCallback;
 import com.touchonmobile.gwtmobile.persistence.client.Persistence;
 import com.touchonmobile.gwtmobile.persistence.client.ScalarCallback;
 import com.touchonmobile.gwtmobile.persistence.test.domain.Category;
@@ -109,7 +108,7 @@ public class TestPersistence extends GWTTestCase {
 				taskEntity.all().list(new CollectionCallback<Task>() {					
 					@Override
 					public void onSuccess(Task[] results) {
-						results[0].fetch(null, categoryEntity, new FetchCallback<Category>() {
+						results[0].fetch(null, categoryEntity, new ScalarCallback<Category>() {
 							@Override
 							public void onSuccess(Category instance) {
 								System.out.print(instance.getName());
@@ -120,13 +119,31 @@ public class TestPersistence extends GWTTestCase {
 				});
 			}
 		});
-		delayTestFinish(10000);
 	}
 
+	public void testObjectSelectJSON() {
+		setupTest(new Callback() {
+			public void onSuccess() {				
+				taskEntity.all().list(new CollectionCallback<Task>() {					
+					@Override
+					public void onSuccess(Task[] results) {
+						results[0].selectJSON(null, new String[] {"Name", "Description"}, new ScalarCallback<String>() {							
+							@Override
+							public void onSuccess(String jsonDump) {
+								System.out.print(jsonDump);
+								tearDownTest();
+							}
+						});
+					}
+				});
+			}
+		});
+	}
+	
 	public void testDumpAndLoad() {
 		setupTest(new Callback() {
 			public void onSuccess() {
-				Persistence.dumpToJson(null, new Entity[] {tagEntity, categoryEntity}, new DumpCallback() {					
+				Persistence.dumpToJson(null, new Entity[] {tagEntity, categoryEntity}, new ScalarCallback<String>() {					
 					@Override
 					public void onSuccess(final String jsonDump) {
 						System.out.print(jsonDump);
