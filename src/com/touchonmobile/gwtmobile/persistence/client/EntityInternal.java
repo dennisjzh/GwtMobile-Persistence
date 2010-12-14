@@ -19,6 +19,7 @@ package com.touchonmobile.gwtmobile.persistence.client;
 import java.util.Date;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayString;
 
 public abstract class EntityInternal<T extends Persistable> implements Entity<T> {	
 	public abstract  T newInstance(JavaScriptObject nativeObject);
@@ -96,5 +97,37 @@ public abstract class EntityInternal<T extends Persistable> implements Entity<T>
 			self.@com.touchonmobile.gwtmobile.persistence.client.EntityInternal::processwLoadCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/touchonmobile/gwtmobile/persistence/client/ScalarCallback;)(result, callback);
 		});
 	}-*/;
+
+	public void index(String column) {
+		index(column, false, getNativeObject());
+	}
+	public void index(String column, boolean unique) {
+		index(column, unique, getNativeObject());
+	}
+	private native void index(String column, boolean unique, JavaScriptObject nativeObject) /*-{
+		if (unique) {
+			nativeObject.index(column, {unique:true});
+		}else {
+			nativeObject.index(column);
+		}		
+	}-*/;	
 	
+	public void index(String[] columns) {
+		index(columns, false);
+	}
+	public void index(String[] columns, boolean unique) {
+		JsArrayString jsArray = (JsArrayString) JavaScriptObject.createArray();
+		for (int i = 0; i < columns.length; i++) {
+			String col = columns[i];
+			jsArray.set(i, col);
+		}
+		index(jsArray, false, getNativeObject());
+	}
+	private native void index(JavaScriptObject columns, boolean unique, JavaScriptObject nativeObject) /*-{
+		if (unique) {
+			nativeObject.index(columns, {unique:true});
+		}else {
+			nativeObject.index(columns);
+		}		
+	}-*/;	
 }

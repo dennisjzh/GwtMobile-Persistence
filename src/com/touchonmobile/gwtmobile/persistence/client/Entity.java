@@ -38,4 +38,8 @@ public interface Entity<T extends Persistable> {
 	public void findBy(String property, String value, ScalarCallback<T> callback);
 	public void findBy(Transaction transaction, String property, Date value, ScalarCallback<T> callback);
 	public void findBy(String property, Date value, ScalarCallback<T> callback);
+	public void index(String column);
+	public void index(String column, boolean unique);
+	public void index(String[] columns);
+	public void index(String[] columns, boolean unique);
 }

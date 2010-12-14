@@ -519,7 +519,62 @@ public class TestPersistence extends GWTTestCase {
 		});
 	}
 
-	
+	public void testIndex() {
+		setupTest(new Callback() {
+			public void onSuccess() {				
+				taskEntity.index("Name");
+				Persistence.schemaSync(new Callback() {					
+					@Override
+					public void onSuccess() {
+						tearDownTest();
+					}
+				});
+			}
+		});
+	}
+
+	public void testIndexUnique() {
+		setupTest(new Callback() {
+			public void onSuccess() {				
+				taskEntity.index("Name", true);
+				Persistence.schemaSync(new Callback() {					
+					@Override
+					public void onSuccess() {
+						tearDownTest();
+					}
+				});
+			}
+		});
+	}
+
+	public void testIndexMultiCols() {
+		setupTest(new Callback() {
+			public void onSuccess() {				
+				taskEntity.index(new String[] {"Name", "Done"});
+				Persistence.schemaSync(new Callback() {					
+					@Override
+					public void onSuccess() {
+						tearDownTest();
+					}
+				});
+			}
+		});
+	}
+
+	public void testIndexMultiColsUnique() {
+		setupTest(new Callback() {
+			public void onSuccess() {				
+				taskEntity.index(new String[] {"Name", "Done"}, true);
+				Persistence.schemaSync(new Callback() {					
+					@Override
+					public void onSuccess() {
+						tearDownTest();
+					}
+				});
+			}
+		});
+	}
+
 	private void setupTest(final Callback callback) {
 
 		Persistence.connect("MyDB", "My DB", 5 * 1024 * 1024);
@@ -543,7 +598,6 @@ public class TestPersistence extends GWTTestCase {
 						for (int i = 0; i < 5; i++) {
 							Task t = taskEntity.newInstance();
 							t.setName("Task" + Integer.toString(i));
-							//t.setName(null);
 							t.setDescription("Task No #" + Integer.toString(i));
 							if (i % 2 == 0) {
 								t.setDone(true);
