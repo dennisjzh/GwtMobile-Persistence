@@ -111,6 +111,10 @@ public class Persistence {
 		);
 	}-*/;
 
+	public static native void flush() /*-{
+		$wnd.persistence.flush();
+	}-*/;
+
 	public static native void reset(Transaction transaction) /*-{
 		$wnd.persistence.reset(transaction);
 	}-*/;
