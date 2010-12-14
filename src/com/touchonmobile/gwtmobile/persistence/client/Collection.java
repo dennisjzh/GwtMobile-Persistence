@@ -37,6 +37,8 @@ public interface Collection<T extends Persistable>{
 	public void list(CollectionCallback<T> callback);
 	public void each(Transaction tx, ScalarCallback<T> callback);
 	public void each(ScalarCallback<T> callback);
+	public void forEach(Transaction tx, ScalarCallback<T> callback);
+	public void forEach(ScalarCallback<T> callback);
 	public void one(Transaction tx, ScalarCallback<T> callback);
 	public void one(ScalarCallback<T> callback);
 	public void destroyAll(Transaction tx, Callback callback);

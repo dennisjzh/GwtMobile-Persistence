@@ -172,6 +172,14 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 	public void each(ScalarCallback<T> callback) {
 		each(nativeObject, this, null, callback);
 	}
+	@Override
+	public void forEach(Transaction tx, ScalarCallback<T> callback) {
+		each(nativeObject, this, tx, callback);
+	}
+	@Override
+	public void forEach(ScalarCallback<T> callback) {
+		each(nativeObject, this, null, callback);
+	}
 	private native void each(JavaScriptObject nativeObject, CollectionImpl<T> self, Transaction tx, ScalarCallback<T> callback) /*-{
 		nativeObject.each(tx, function(result) {
 			self.@com.touchonmobile.gwtmobile.persistence.client.CollectionImpl::processCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/touchonmobile/gwtmobile/persistence/client/ScalarCallback;)(result, callback);
