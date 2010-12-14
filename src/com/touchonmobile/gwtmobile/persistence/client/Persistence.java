@@ -79,6 +79,10 @@ public class Persistence {
 		);
 	}-*/;
 
+	public static native void schemaSync() /*-{
+		$wnd.persistence.schemaSync();
+	}-*/;
+	
 	public static void add(Persistable persistable) {
 		add(((PersistableInternal)persistable).getNativeObject());
 	}
