@@ -208,4 +208,18 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 	private void processCallback(int result, ScalarCallback<Integer> callback) {
 		callback.onSuccess(result);
 	}
+	
+	public Collection<T> or(Filter filter) {
+		return newCollection(or(nativeObject, filter));
+	}
+	private native JavaScriptObject or(JavaScriptObject nativeObject, JavaScriptObject filter) /*-{
+		return nativeObject.or(filter);
+	}-*/;
+	
+	public Collection<T> and(Filter filter) {
+		return newCollection(and(nativeObject, filter));
+	}
+	private native JavaScriptObject and(JavaScriptObject nativeObject, JavaScriptObject filter) /*-{
+		return nativeObject.and(filter);
+	}-*/;
 }

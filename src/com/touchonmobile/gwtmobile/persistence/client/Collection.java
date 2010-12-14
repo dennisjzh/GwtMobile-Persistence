@@ -42,5 +42,7 @@ public interface Collection<T extends Persistable>{
 	public void destroyAll(Transaction tx, Callback callback);
 	public void destroyAll(Callback callback);
 	public void count(Transaction tx, ScalarCallback<Integer> callback);
-	public void count(ScalarCallback<Integer> callback);	
+	public void count(ScalarCallback<Integer> callback);
+	public Collection<T> or(Filter filter);
+	public Collection<T> and(Filter filter);
 }

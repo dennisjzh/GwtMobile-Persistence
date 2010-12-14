@@ -16,6 +16,7 @@
 
 package com.touchonmobile.gwtmobile.persistence.client;
 
+import java.util.Date;
 import java.util.Map;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -181,5 +182,38 @@ public class Persistence {
 
 	public static native JavaScriptObject define(String entityName, JavaScriptObject fields) /*-{
 		return $wnd.persistence.define(entityName, fields);
-	}-*/;	
+	}-*/;
+	
+	public static Filter newPropertyFilter(String property, String operator, char value) {
+		return newPropertyFilter(property, operator, new String(new char[] {value}));
+	}
+
+	public static native Filter newPropertyFilter(String property, String operator, String value) /*-{
+		return new $wnd.persistence.PropertyFilter(property, operator, value);
+	}-*/;
+
+	public static native Filter newPropertyFilter(String property, String operator, boolean value) /*-{
+		return new $wnd.persistence.PropertyFilter(property, operator, value);
+	}-*/;
+	
+	public static native Filter newPropertyFilter(String property, String operator, int value) /*-{
+		return new $wnd.persistence.PropertyFilter(property, operator, value);
+	}-*/;
+
+	public static native Filter newPropertyFilter(String property, String operator, double value) /*-{
+		return new $wnd.persistence.PropertyFilter(property, operator, value);
+	}-*/;
+
+	public static Filter newPropertyFilter(String property, String operator, Date value) {
+		return newPropertyFilter(property, operator, (double)value.getTime());
+	}
+
+	public static native Filter newAndFilter(Filter filter1, Filter filter2) /*-{
+		return new $wnd.persistence.AndFilter(filter1, filter2);
+	}-*/;
+
+	public static native Filter newOrFilter(Filter filter1, Filter filter2) /*-{
+		return new $wnd.persistence.OrFilter(filter1, filter2);
+	}-*/;
+
 }
