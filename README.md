@@ -99,7 +99,7 @@ How to use
 * Update your project configure file (.gwt.xml) to include the following:
 
 		<script src="http://code.google.com/apis/gears/gears_init.js" />  <!-- Include this line only if you use Google Gears database.-->
-		<inherits name='com.touchonmobile.gwtmobile.persistence.gwtmobile_persistence' />
+		<inherits name='com.gwtmobile.persistence.gwtmobile_persistence' />
   
 * Now your GWT project is ready to persist objects to the brower database!
  
