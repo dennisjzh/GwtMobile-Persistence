@@ -1,7 +1,9 @@
 gwtmobile-persistence
 ===============
 
-gwtmobile-persistence is an GWT wrapper of the Javascript object-relational mapper library [persistence.js](http://github.com/zefhemel/persistencejs). It provides client-side object persistence capability to GWT applications, a feature similar to what Hibernate provides for GWT applications on the server-side.
+gwtmobile-persistence is a GWT wrapper of the Javascript object-relational mapper library [persistence.js](http://github.com/zefhemel/persistencejs). It provides client-side object persistence capability to GWT applications, a feature similar to what Hibernate provides for GWT applications on the server-side.
+
+gwtmobile-persistence is part of [GwtMobile](http://github.com/dennisjzh/GwtMobile), a GWT mobile development platform.
 
 Schema definition
 -----------------
@@ -101,5 +103,5 @@ How to use
 		<script src="http://code.google.com/apis/gears/gears_init.js" />  <!-- Include this line only if you use Google Gears database.-->
 		<inherits name='com.gwtmobile.persistence.gwtmobile_persistence' />
   
-* Now your GWT project is ready to persist objects to the brower database!
+* Now your GWT project is ready to persist objects to the browser database!
  
