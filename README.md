@@ -1,5 +1,5 @@
 gwtmobile-persistence
-===============
+=====================
 
 gwtmobile-persistence is a GWT wrapper of the Javascript object-relational mapper library [persistence.js](http://github.com/zefhemel/persistencejs). It provides client-side object persistence capability to GWT applications, a feature similar to what Hibernate provides for GWT applications on the server-side.
 
