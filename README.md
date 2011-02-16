@@ -105,3 +105,9 @@ How to use
   
 * Now your GWT project is ready to persist objects to the browser database!
  
+Apps that use GWT Mobile Persistence
+------------------------------------
+
+[Fantasy Predictor](http://www.touchonmobile.com): Manage all you Fantasy Football teams with the help of the Fantasy Predictor. 
+[Android Market](http://market.android.com/details?id=com.TouchOnMobile.FantasyPredictor), [iTunes App Store](http://itunes.apple.com/us/app/fantasy-predictor/id405605997)
+
