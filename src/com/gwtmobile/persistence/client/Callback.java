@@ -17,5 +17,5 @@
 package com.gwtmobile.persistence.client;
 
 public interface Callback {
-	public void onSuccess();
+	public void onSuccess(); 
 }
