@@ -40,7 +40,7 @@ public abstract class EntityInternal<T extends Persistable> implements Entity<T>
 			self.@com.gwtmobile.persistence.client.EntityInternal::processwLoadCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/gwtmobile/persistence/client/ScalarCallback;)(result, callback);
 		});
 	}-*/;
-	@SuppressWarnings("unused")
+	
 	private void processwLoadCallback(JavaScriptObject result, ScalarCallback<T> callback) {
 		callback.onSuccess(result == null ? null : newInstance(result));
 	}
