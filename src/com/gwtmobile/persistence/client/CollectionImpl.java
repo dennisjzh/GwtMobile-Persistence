@@ -200,7 +200,7 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 		})
 	}-*/;		
 
-	@SuppressWarnings("unused")
+
 	private void processCallback(JsArray<JavaScriptObject> results, CollectionCallback<T> callback) {
 		T[] array = entity.newInstanceArray(results.length());
 		for (int i = 0; i < array.length; i++) {
@@ -208,11 +208,11 @@ public class CollectionImpl<T extends Persistable> implements Collection<T> {
 		}
 		callback.onSuccess(array);
 	}
-	@SuppressWarnings("unused")
+
 	private void processCallback(JavaScriptObject result, ScalarCallback<T> callback) {
 		callback.onSuccess(entity.newInstance(result));
 	}
-	@SuppressWarnings("unused")
+
 	private void processCallback(int result, ScalarCallback<Integer> callback) {
 		callback.onSuccess(result);
 	}

@@ -282,7 +282,7 @@ public class GenUtils {
 		if (classType == null) {
 			return false;
 		}
-		Set<JClassType> superTypes = classType.getFlattenedSupertypeHierarchy();
+		Set<? extends JClassType> superTypes = classType.getFlattenedSupertypeHierarchy();
 		for (JClassType superType : superTypes) {
 			if (superType.getSimpleSourceName().equals(superClass)) {
 				return true;

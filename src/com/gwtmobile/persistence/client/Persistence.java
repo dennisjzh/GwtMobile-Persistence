@@ -161,7 +161,7 @@ public class Persistence {
 		);
 	}-*/;
 	
-	@SuppressWarnings("unused")
+	
 	private static void processStringCallback(String result, ScalarCallback<String> callback) {
 		callback.onSuccess(result);
 	}
