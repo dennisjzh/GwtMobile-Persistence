@@ -122,9 +122,9 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.6</version>
 				<configuration>
-					<excludes>
+					<!-- excludes>
 						<exclude>**/TestPersistence.java</exclude>
-					</excludes>
+					</excludes-->
 					<additionalClasspathElements>
 						<additionalClasspathElement>${project.build.sourceDirectory}</additionalClasspathElement>
 						<additionalClasspathElement>${project.build.testSourceDirectory}</additionalClasspathElement>
@@ -134,7 +134,7 @@
 					<systemProperties>
 						<property>
 							<name>gwt.args</name>
-							<value>-out \${webAppDirectory}</value>
+							<value>-out \${webAppDirectory} -prod -runStyle Manual:1</value>
 						</property>
 					</systemProperties>
 				</configuration>
