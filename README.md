@@ -1,9 +1,9 @@
-gwtmobile-persistence
+GWT Mobile Persistence
 =====================
 
 gwtmobile-persistence is a GWT wrapper of the Javascript object-relational mapper library [persistence.js](http://github.com/zefhemel/persistencejs). It provides client-side object persistence capability to GWT applications, a feature similar to what Hibernate provides for GWT applications on the server-side.
 
-gwtmobile-persistence is part of [GwtMobile](http://github.com/dennisjzh/GwtMobile), a GWT mobile development platform.
+gwtmobile-persistence is part of [GWT Mobile](http://github.com/dennisjzh/GwtMobile), a GWT mobile development platform.
 
 Schema definition
 -----------------
@@ -111,3 +111,8 @@ Apps that use GWT Mobile Persistence
 [Fantasy Predictor](http://www.touchonmobile.com): Manage all you Fantasy Football teams with the help of the Fantasy Predictor. 
 [Android Market](http://market.android.com/details?id=com.TouchOnMobile.FantasyPredictor), [iTunes App Store](http://itunes.apple.com/us/app/fantasy-predictor/id405605997)
 
+
+GWT Mobile Google Group
+-----------------------
+
+Have questions? Post it on the [GWT Mobile Google Group](http://groups.google.com/group/gwtmobile) 
