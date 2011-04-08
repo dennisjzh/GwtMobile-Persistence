@@ -41,6 +41,7 @@ public abstract class EntityInternal<T extends Persistable> implements Entity<T>
 		});
 	}-*/;
 	
+	@SuppressWarnings("unused")
 	private void processwLoadCallback(JavaScriptObject result, ScalarCallback<T> callback) {
 		callback.onSuccess(result == null ? null : newInstance(result));
 	}
